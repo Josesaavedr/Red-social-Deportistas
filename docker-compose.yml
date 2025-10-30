@@ -18,15 +18,20 @@ services:
       - "8000:8000"
     environment:
       - USERS_SVC=http://users:8001
-      - POSTS_SVC=http://posts:8002
+      - POSTS_SVC=http://service1:8002 # Corregido para apuntar al nombre del servicio correcto
       - ACTIVITIES_SVC=http://activities:8003
       - MESSAGES_SVC=http://messages:8004
+      - EVENTS_SVC=http://events:8005 # Nuevo servicio de eventos
+      - SOCIAL_SVC=http://social:8006 # Nuevo servicio social
       - JWT_SECRET=${JWT_SECRET:-your_jwt_secret}
     depends_on:
       - users
       - posts
       - activities
+      - service1 # Añadido para reflejar el cambio de nombre
       - messages
+      - events # Añadido el servicio de eventos
+      - social # Añadido el servicio social
 
   # Microservicio de Usuarios (antes auth-service)
   users:
@@ -48,10 +53,10 @@ services:
     volumes:
       - users_data:/data/db
 
-  # Microservicio de Publicaciones (Posts)
-  posts:
-     build: ./services/posts # TODO: Renombrar 'service1' a 'posts'
-     container_name: posts-service
+  # Microservicio de Publicaciones (Posts) - Usando service1 como fuente
+  service1:
+     build: ./services/service1
+     container_name: posts-service # Este es el servicio de posts según la configuración actual
      ports:
        - "8002:8002"
      environment:
@@ -72,17 +77,37 @@ services:
      volumes:
        - posts_data:/var/lib/postgresql/data
 
-  # TODO: Definir los servicios 'activities' y 'messages' de manera similar
+  # Microservicio de Actividades
   activities:
-    image: your_activities_service_image # TODO: Reemplazar con build: ./services/activities
+    build: ./services/service1 # Asumiendo que service1 es el código para actividades
+    container_name: activities-service
+    ports:
+      - "8003:8003"
+    environment:
+      - DATABASE_URL=postgresql://${ACTIVITIES_POSTGRES_USER:-user}:${ACTIVITIES_POSTGRES_PASSWORD:-password}@activities-db:5432/${ACTIVITIES_POSTGRES_DB:-activities_db}
+      - SQLALCHEMY_ECHO=${SQLALCHEMY_ECHO:-false}
+      - USERS_SVC=http://users:8001 # Añadir esta línea para que el servicio de actividades conozca el servicio de usuarios
+    depends_on:
+      - activities-db
     restart: unless-stopped
+
+  # Base de datos para el servicio de Actividades
+  activities-db:
+    image: postgres:latest
+    container_name: activities-db
+    environment:
+      - POSTGRES_USER=${ACTIVITIES_POSTGRES_USER:-user}
+      - POSTGRES_PASSWORD=${ACTIVITIES_POSTGRES_PASSWORD:-password}
+      - POSTGRES_DB=${ACTIVITIES_POSTGRES_DB:-activities_db}
+    ports:
+      - "5433:5432" # Exponer en un puerto diferente para evitar conflictos con posts-db
+    volumes:
+      - activities_data:/var/lib/postgresql/data
 
   messages:
     image: your_messages_service_image # TODO: Reemplazar con build: ./services/messages
     restart: unless-stopped
-
 volumes:
   users_data:
   posts_data:
   activities_data:
-  messages_data:

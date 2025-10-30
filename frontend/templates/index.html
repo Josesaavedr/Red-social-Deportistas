@@ -1,9 +1,64 @@
-{% extends "base.html" %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }} - Red Social Deportistas</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <header>
+        <h1>Red Social Deportistas</h1>
+        <nav>
+            <ul>
+                <li><a href="{{ url_for('index') }}">Inicio</a></li>
+                <li><a href="{{ url_for('new_item') }}">Registrar Actividad</a></li>
+            </ul>
+        </nav>
+    </header>
+q
+    <main>
+        <h2>Actividades Recientes</h2>
+        {% if activities %}
+            <div class="activity-list">
+                {% for activity in activities %}
+                    <div class="activity-card">
+                        <a href="{{ url_for('activity_detail', activity_id=activity.id) }}" class="activity-title-link">
+                            <h3>{{ activity.title }}</h3>
+                        </a>
+                        <p><strong>Autor:</strong> {{ activity.author_name if activity.author_name else 'Desconocido' }}</p>
+                        <p>{{ activity.content }}</p>
+                        <div class="card-footer">
+                            <small>Publicado el: {{ activity.created_at | datetimeformat }}</small> 
+                            <div class="actions">
+                                <input type="number" name="user_id" placeholder="Tu ID" style="width: 60px; margin-right: 5px;">
+                                <form action="{{ url_for('like_activity', activity_id=activity.id) }}" method="POST" class="like-form">
+                                    <button type="submit" class="like-button">👍 {{ activity.likes }}</button>
+                                </form>
+                                <form action="{{ url_for('delete_activity', activity_id=activity.id) }}" method="POST">
+                                    <button type="submit" class="delete-button" onclick="return confirm('¿Estás seguro de que quieres eliminar esta actividad?');">Eliminar</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p>No hay actividades registradas aún o hubo un problema al cargarlas.</p>
+        {% endif %}
 
-{% block content %}
-    <h2>¡Bienvenido al Proyecto del Seminario!</h2>
-    <p>Este es el frontend de tu proyecto. Utiliza el API Gateway para interactuar con los microservicios.</p>
-
-    <a href="{{ url_for('new_item') }}">Crear un nuevo ítem</a>
-
-{% endblock %}
+        <!-- Controles de Paginación -->
+        {% if total_pages > 1 %}
+        <div class="pagination">
+            {% if page > 1 %}
+                <a href="{{ url_for('index', page=page-1) }}" class="page-button">&laquo; Anterior</a>
+            {% endif %}
+            <span class="page-info">Página {{ page }} de {{ total_pages }}</span>
+            {% if page < total_pages %}
+                <a href="{{ url_for('index', page=page+1) }}" class="page-button">Siguiente &raquo;</a>
+            {% endif %}
+        </div>
+        {% endif %}
+    </main>
+</body>
+</html>
