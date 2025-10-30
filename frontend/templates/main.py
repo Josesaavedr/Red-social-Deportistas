@@ -1,9 +1,13 @@
 from fastapi import FastAPI, APIRouter, HTTPException, Depends, status
 from sqlalchemy.orm import Session # , joinedload # Importar joinedload si se van a cargar relaciones anidadas
-from typing import List
+from typing import List, Optional
+from fastapi.security import OAuth2PasswordBearer
 
 # Importa los módulos de base de datos y modelos
 from . import models, database, auth
+# Importa las funciones de ayuda para peticiones HTTP
+from common.helpers.utils import send_async_bulk_request
+from common.config import settings
 
 app = FastAPI()
 
@@ -35,28 +39,23 @@ def read_activities(
     db: Session = Depends(database.get_db),
     token: Optional[str] = Depends(oauth2_scheme_optional) # Autenticación opcional para likes
 ):
-    """
-    Obtiene una lista de actividades de la base de datos.
-    """
+    """Obtiene una lista de actividades, enriquecida con nombres de autor de forma eficiente."""
     activities = db.query(models.ActivityDB).offset(skip).limit(limit).all()
     
-    # Obtener IDs de autores únicos para una sola llamada al servicio de usuarios
+    # 1. Recolectar todos los IDs de autor únicos
     author_ids = list(set(activity.author_id for activity in activities))
-    users_data = {}
-    if author_ids:
-        try:
-            # Asumiendo un endpoint en el servicio de usuarios para obtener múltiples usuarios por ID
-            # Para simplificar, haremos llamadas individuales por ahora, pero esto es ineficiente para muchos usuarios.
-            for author_id in author_ids:
-                user_response = requests.get(f"{USERS_SVC_URL}/api/v1/users/{author_id}")
-                user_response.raise_for_status()
-                users_data[author_id] = user_response.json().get("username", f"Usuario {author_id}")
-        except requests.exceptions.RequestException:
-            pass # Manejar errores, por ahora simplemente no se asigna el nombre
+    
+    # 2. Realizar una única petición en lote para obtener los datos de los usuarios
+    #    Asumimos que el servicio de usuarios tiene un endpoint /api/v1/users/bulk
+    users_map = await send_async_bulk_request(f"{settings.USERS_SVC_URL}/api/v1/users/bulk", author_ids)
 
-    # Enriquecer las actividades con el nombre del autor y el estado del like
-    # Se usa una función auxiliar para evitar duplicar código
-    return [_enrich_activity_with_user_data(db, activity, users_data, token) for activity in activities]
+    # 3. Enriquecer las actividades con los datos obtenidos
+    enriched_activities = []
+    for activity in activities:
+        enriched_activity = _enrich_activity_with_user_data(db, activity, users_map, token)
+        enriched_activities.append(enriched_activity)
+        
+    return enriched_activities
 
 # Endpoint para contar el total de actividades
 @router.get("/activities/count")
@@ -82,7 +81,10 @@ def read_activity(
     if db_activity is None:
         raise HTTPException(status_code=404, detail="Activity not found")
 
-    return _enrich_activity_with_user_data(db, db_activity, {}, token)
+    # Obtenemos el autor de esta actividad específica
+    users_map = await send_async_bulk_request(f"{settings.USERS_SVC_URL}/api/v1/users/bulk", [db_activity.author_id])
+
+    return _enrich_activity_with_user_data(db, db_activity, users_map, token)
 
 # Endpoint para crear una nueva actividad
 @router.post("/activities/", response_model=models.Activity, status_code=status.HTTP_201_CREATED)
@@ -109,7 +111,10 @@ def create_activity(
     db.add(db_activity)
     db.commit()
     db.refresh(db_activity)
-    return _enrich_activity_with_user_data(db, db_activity, {}, None) # No necesitamos token para el like en la creación
+    # Obtenemos el autor para la respuesta
+    users_map = await send_async_bulk_request(f"{settings.USERS_SVC_URL}/api/v1/users/bulk", [db_activity.author_id])
+
+    return _enrich_activity_with_user_data(db, db_activity, users_map, None) # No necesitamos token para el like en la creación
 
 # Endpoint para actualizar una actividad
 @router.put("/activities/{activity_id}", response_model=models.Activity)
@@ -136,7 +141,10 @@ def update_activity(
     
     db.commit()
     db.refresh(db_activity)
-    return _enrich_activity_with_user_data(db, db_activity, {}, None) # No necesitamos token para el like en la actualización
+    # Obtenemos el autor para la respuesta
+    users_map = await send_async_bulk_request(f"{settings.USERS_SVC_URL}/api/v1/users/bulk", [db_activity.author_id])
+
+    return _enrich_activity_with_user_data(db, db_activity, users_map, None) # No necesitamos token para el like en la actualización
 
 # Endpoint para dar "Me gusta" a una actividad (registra un LikeDB)
 @router.post("/activities/{activity_id}/like", response_model=models.Like, status_code=status.HTTP_201_CREATED)
@@ -230,23 +238,18 @@ def read_comments_for_activity(activity_id: int, db: Session = Depends(database.
     # Pero el modelo Pydantic Comment no expone los detalles de la actividad, así que no es necesario aquí.
     comments = db.query(models.CommentDB).filter(models.CommentDB.activity_id == activity_id).order_by(models.CommentDB.created_at.desc()).all() # Ordenar por fecha
     
-    # Obtener IDs de autores de comentarios únicos
+    # 1. Recolectar IDs de autores de comentarios únicos
     comment_author_ids = list(set(comment.author_id for comment in comments))
-    comment_users_data = {}
-    if comment_author_ids:
-        try:
-            for author_id in comment_author_ids:
-                user_response = requests.get(f"{USERS_SVC_URL}/api/v1/users/{author_id}")
-                user_response.raise_for_status()
-                comment_users_data[author_id] = user_response.json().get("username", f"Usuario {author_id}")
-        except requests.exceptions.RequestException:
-            pass
+    
+    # 2. Realizar una única petición en lote para obtener los datos de los autores
+    users_map = await send_async_bulk_request(f"{settings.USERS_SVC_URL}/api/v1/users/bulk", comment_author_ids)
 
-    # Enriquecer los comentarios con el nombre del autor
+    # 3. Enriquecer los comentarios con el nombre del autor
     enriched_comments = []
     for comment in comments:
         comment_data = models.Comment.from_orm(comment).dict()
-        comment_data["author_name"] = comment_users_data.get(comment.author_id, f"Usuario {comment.author_id}")
+        author_info = users_map.get(comment.author_id)
+        comment_data["author_name"] = author_info.get("username") if author_info else f"Usuario {comment.author_id}"
         enriched_comments.append(comment_data)
         
     return enriched_comments
@@ -273,20 +276,16 @@ def delete_activity(
     return
 
 # Función auxiliar para enriquecer la actividad con el nombre del autor y el estado del like
-def _enrich_activity_with_user_data(db: Session, db_activity: models.ActivityDB, users_data: dict, token: Optional[str]):
+def _enrich_activity_with_user_data(db: Session, db_activity: models.ActivityDB, users_map: dict, token: Optional[str]):
     activity_data = models.Activity.from_orm(db_activity).dict()
     
     # Obtener nombre del autor
     author_id = db_activity.author_id
-    if author_id in users_data:
-        activity_data["author_name"] = users_data[author_id]
+    author_info = users_map.get(author_id)
+    if author_info:
+        activity_data["author_name"] = author_info.get("username", f"Usuario {author_id}")
     else:
-        try:
-            user_response = requests.get(f"{USERS_SVC_URL}/api/v1/users/{author_id}")
-            user_response.raise_for_status()
-            activity_data["author_name"] = user_response.json().get("username", f"Usuario {author_id}")
-        except requests.exceptions.RequestException:
-            activity_data["author_name"] = f"Usuario {author_id}" # Fallback si el servicio de usuarios falla
+        activity_data["author_name"] = f"Usuario {author_id}" # Fallback si el usuario no se encontró
 
     # Verificar si el usuario actual ha dado "Me gusta"
     activity_data["current_user_has_liked"] = False

@@ -59,6 +59,31 @@ async def send_async_request_to_service(url: str, method: str = "GET", data: Any
             logger.error(f"Error en la petición asíncrona: {e}")
             raise e
 
+async def send_async_bulk_request(url: str, ids: list[int]) -> dict[int, dict]:
+    """
+    Envía una petición asíncrona para obtener múltiples recursos por sus IDs.
+    Asume que el endpoint de destino acepta un POST con un JSON como: {"ids": [1, 2, 3]}.
+    
+    Args:
+        url (str): La URL del endpoint "bulk".
+        ids (list[int]): Lista de IDs a solicitar.
+    
+    Returns:
+        dict[int, dict]: Un diccionario mapeando cada ID a su objeto de datos correspondiente.
+    """
+    if not ids:
+        return {}
+    
+    async with httpx.AsyncClient() as client:
+        try:
+            response = await client.post(url, json={"ids": ids})
+            response.raise_for_status()
+            # Convierte la lista de usuarios en un mapa {user_id: user_data}
+            return {item['id']: item for item in response.json()}
+        except httpx.HTTPError as e:
+            logger.error(f"Error en la petición asíncrona en lote: {e}")
+            return {} # Devuelve un diccionario vacío en caso de error
+
 def format_date(dt_object: datetime):
     """Formatea un objeto datetime a una cadena de texto."""
     if not isinstance(dt_object, datetime):
