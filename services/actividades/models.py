@@ -6,7 +6,8 @@ from pydantic import BaseModel
 from datetime import datetime
 from typing import Optional
 
-from .database import Base
+# Importa la base declarativa desde el archivo de configuración de la base de datos.
+from .database import Base 
 
 # Importa 'relationship' para definir las relaciones entre modelos
 from sqlalchemy.orm import relationship
