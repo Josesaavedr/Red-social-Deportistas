@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block title %}Eventos{% endblock %}
+
+{% block content %}
+<main>
+    <div class="header-with-action">
+        <h2>Próximos Eventos</h2>
+        {# <a href="{{ url_for('create_event') }}" class="button">Crear Evento</a> #}
+    </div>
+
+    {% if events %}
+        <div class="event-list">
+            {% for event in events %}
+                <div class="event-card">
+                    <a href="{{ url_for('event_detail', event_id=event.id) }}" class="event-title-link">
+                        <h3>{{ event.title }}</h3>
+                    </a>
+                    <p><strong>Organizador:</strong> {{ event.organizer_name if event.organizer_name else 'Desconocido' }}</p>
+                    <p><strong>Ubicación:</strong> {{ event.location }}</p>
+                    <p><strong>Fecha:</strong> {{ event.event_date | datetimeformat('%d de %B, %H:%M') }}</p>
+                    <div class="card-footer">
+                        <small>Publicado el: {{ event.created_at | datetimeformat }}</small>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p>No hay eventos programados en este momento.</p>
+    {% endif %}
+</main>
+{% endblock %}

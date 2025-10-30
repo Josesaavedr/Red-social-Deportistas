@@ -1,4 +1,4 @@
-version: '3.8'
+
 
 services:
   frontend:
@@ -7,7 +7,7 @@ services:
     ports:
       - "5000:5000"
     environment:
-      - API_GATEWAY_URL=http://api-gateway:8000 # Flask dev server needs this
+      - API_GATEWAY_URL=http://api-gateway:8000
     depends_on:
       - api-gateway
 
@@ -16,98 +16,46 @@ services:
     container_name: api-gateway
     ports:
       - "8000:8000"
+    # Las variables de entorno se actualizan para apuntar a los servicios correctos.
+    # POSTS_SVC y MESSAGES_SVC ahora apuntan al servicio 'social'.
     environment:
-      - USERS_SVC=http://users:8001
-      - POSTS_SVC=http://service1:8002 # Corregido para apuntar al nombre del servicio correcto
-      - ACTIVITIES_SVC=http://activities:8003
-      - MESSAGES_SVC=http://messages:8004
-      - EVENTS_SVC=http://events:8005 # Nuevo servicio de eventos
-      - SOCIAL_SVC=http://social:8006 # Nuevo servicio social
+      - USERS_SVC=http://authentication:8001
+      - POSTS_SVC=http://social:8006 # Apunta al servicio social
+      - ACTIVITIES_SVC=http://actividades:8003
+      - MESSAGES_SVC=http://social:8006 # Apunta al servicio social
+      - EVENTS_SVC=http://eventos:8005
+      - SOCIAL_SVC=http://social:8006
       - JWT_SECRET=${JWT_SECRET:-your_jwt_secret}
     depends_on:
-      - users
-      - posts
-      - activities
-      - service1 # Añadido para reflejar el cambio de nombre
-      - messages
-      - events # Añadido el servicio de eventos
-      - social # Añadido el servicio social
+      - authentication
+      - actividades
+      - eventos
+      - social
 
-  # Microservicio de Usuarios (antes auth-service)
-  users:
-    build: ./services/users # TODO: Renombrar 'authentication' a 'users'
-    container_name: users-service
+  # El servicio 'users' se renombra a 'authentication' y se corrige la ruta de build.
+  authentication:
+    build: ./services/authentication
+    container_name: authentication
     ports:
-      - "8001:8001"
-    environment:
-      - DATABASE_URL=mongodb://users-db:27017/users_db
-    depends_on:
-      - users-db
+      - "8001:8000"
 
-  # Base de datos para el servicio de usuarios
-  users-db:
-    image: mongo:latest
-    container_name: users-db
+  # Se corrige la ruta de build para el servicio 'activities'.
+  actividades:
+    build: ./services/actividades
+    container_name: actividades
     ports:
-      - "27017:27017"
-    volumes:
-      - users_data:/data/db
+      - "8003:8000"
 
-  # Microservicio de Publicaciones (Posts) - Usando service1 como fuente
-  service1:
-     build: ./services/service1
-     container_name: posts-service # Este es el servicio de posts según la configuración actual
-     ports:
-       - "8002:8002"
-     environment:
-       - DATABASE_URL=postgresql://${POSTGRES_USER:-user}:${POSTGRES_PASSWORD:-password}@posts-db:5432/${POSTGRES_DB:-posts_db}
-     depends_on:
-       - posts-db
-
-  # Base de datos para el servicio de Publicaciones
-  posts-db:
-     image: postgres:latest
-     container_name: posts-db
-     environment:
-       - POSTGRES_USER=${POSTGRES_USER:-user}
-       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-password}
-       - POSTGRES_DB=${POSTGRES_DB:-posts_db}
-     ports:
-       - "5432:5432" # Exponer solo si se necesita acceso externo
-     volumes:
-       - posts_data:/var/lib/postgresql/data
-
-  # Microservicio de Actividades
-  activities:
-    build: ./services/service1 # Asumiendo que service1 es el código para actividades
-    container_name: activities-service
+  # Se corrige la ruta de build para el servicio 'events'.
+  eventos:
+    build: ./services/eventos
+    container_name: eventos
     ports:
-      - "8003:8003"
-    environment:
-      - DATABASE_URL=postgresql://${ACTIVITIES_POSTGRES_USER:-user}:${ACTIVITIES_POSTGRES_PASSWORD:-password}@activities-db:5432/${ACTIVITIES_POSTGRES_DB:-activities_db}
-      - SQLALCHEMY_ECHO=${SQLALCHEMY_ECHO:-false}
-      - USERS_SVC=http://users:8001 # Añadir esta línea para que el servicio de actividades conozca el servicio de usuarios
-    depends_on:
-      - activities-db
-    restart: unless-stopped
+      - "8005:8000"
 
-  # Base de datos para el servicio de Actividades
-  activities-db:
-    image: postgres:latest
-    container_name: activities-db
-    environment:
-      - POSTGRES_USER=${ACTIVITIES_POSTGRES_USER:-user}
-      - POSTGRES_PASSWORD=${ACTIVITIES_POSTGRES_PASSWORD:-password}
-      - POSTGRES_DB=${ACTIVITIES_POSTGRES_DB:-activities_db}
+  # Se corrige la ruta de build para el servicio 'social'.
+  social:
+    build: ./services/social
+    container_name: social
     ports:
-      - "5433:5432" # Exponer en un puerto diferente para evitar conflictos con posts-db
-    volumes:
-      - activities_data:/var/lib/postgresql/data
-
-  messages:
-    image: your_messages_service_image # TODO: Reemplazar con build: ./services/messages
-    restart: unless-stopped
-volumes:
-  users_data:
-  posts_data:
-  activities_data:
+      - "8006:8000"

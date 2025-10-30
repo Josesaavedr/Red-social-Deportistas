@@ -30,14 +30,25 @@ q
                         <p>{{ activity.content }}</p>
                         <div class="card-footer">
                             <small>Publicado el: {{ activity.created_at | datetimeformat }}</small> 
-                            <div class="actions">
-                                <input type="number" name="user_id" placeholder="Tu ID" style="width: 60px; margin-right: 5px;">
-                                <form action="{{ url_for('like_activity', activity_id=activity.id) }}" method="POST" class="like-form">
-                                    <button type="submit" class="like-button">👍 {{ activity.likes }}</button>
-                                </form>
-                                <form action="{{ url_for('delete_activity', activity_id=activity.id) }}" method="POST">
-                                    <button type="submit" class="delete-button" onclick="return confirm('¿Estás seguro de que quieres eliminar esta actividad?');">Eliminar</button>
-                                </form>
+                            <div class="actions">                                
+                                {% if session.token %}
+                                    {# Botón de Like/Unlike #}
+                                    {% if activity.current_user_has_liked %}
+                                        <form action="{{ url_for('unlike_activity', activity_id=activity.id) }}" method="POST" style="display: inline-block;">
+                                            <button type="submit" class="unlike-button">👎 {{ activity.likes }}</button>
+                                        </form>
+                                    {% else %}
+                                        <form action="{{ url_for('like_activity', activity_id=activity.id) }}" method="POST" style="display: inline-block;">
+                                            <button type="submit" class="like-button">👍 {{ activity.likes }}</button>
+                                        </form>
+                                    {% endif %}
+                                    {# Botón de Eliminar (solo si es el autor) #}
+                                    <form action="{{ url_for('delete_activity', activity_id=activity.id) }}" method="POST" style="display: inline-block;">
+                                        <button type="submit" class="delete-button" onclick="return confirm('¿Estás seguro de que quieres eliminar esta actividad?');">Eliminar</button>
+                                    </form>
+                                {% else %}
+                                    <span class="like-count">👍 {{ activity.likes }}</span>
+                                {% endif %}
                             </div>
                         </div>
                     </div>

@@ -5,7 +5,7 @@ from sqlalchemy.orm import Session
 import requests
 
 # Importar los módulos de base de datos, modelos y autenticación
-from . import database, models, auth
+from . import database, models, auth, repository
 
 # URL del servicio de usuarios (obtenida de variables de entorno)
 USERS_SVC_URL = os.getenv("USERS_SVC", "http://users:8001")
@@ -33,12 +33,8 @@ def create_post(
     db: Session = Depends(database.get_db),
     current_user_id: int = Depends(auth.get_current_user_id)
 ):
-    """Crea una nueva publicación (post)."""
-    db_post = models.PostDB(**post.dict(), author_id=current_user_id)
-    db.add(db_post)
-    db.commit()
-    db.refresh(db_post)
-    return db_post
+    """Crea una nueva publicación (post) para el usuario autenticado."""
+    return repository.create_post(db, post=post, author_id=current_user_id)
 
 @router.get("/posts/feed/", response_model=List[models.Post])
 def get_user_feed(
@@ -46,20 +42,12 @@ def get_user_feed(
     current_user_id: int = Depends(auth.get_current_user_id)
 ):
     """Obtiene las publicaciones de los usuarios que el usuario actual sigue."""
-    followed_users = db.query(models.FollowerDB.followed_id).filter(models.FollowerDB.follower_id == current_user_id).all()
-    followed_user_ids = [user.followed_id for user in followed_users]
-
-    # Incluir también los posts del propio usuario en su feed
-    followed_user_ids.append(current_user_id)
-
-    posts = db.query(models.PostDB).filter(models.PostDB.author_id.in_(followed_user_ids)).order_by(models.PostDB.created_at.desc()).limit(100).all()
-    return posts
+    return repository.get_user_feed(db, user_id=current_user_id)
 
 @router.get("/users/{user_id}/posts/", response_model=List[models.Post])
 def get_user_posts(user_id: int, db: Session = Depends(database.get_db)):
     """Obtiene todas las publicaciones de un usuario específico."""
-    posts = db.query(models.PostDB).filter(models.PostDB.author_id == user_id).order_by(models.PostDB.created_at.desc()).all()
-    return posts
+    return repository.get_user_posts(db, user_id=user_id)
 
 # --- Endpoints para Seguidores (Followers) ---
 
@@ -70,19 +58,7 @@ def follow_user(
     current_user_id: int = Depends(auth.get_current_user_id)
 ):
     """Permite al usuario actual seguir a otro usuario."""
-    if user_id == current_user_id:
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="You cannot follow yourself")
-
-    # Verificar si ya lo sigue
-    existing_follow = db.query(models.FollowerDB).filter_by(follower_id=current_user_id, followed_id=user_id).first()
-    if existing_follow:
-        raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="You are already following this user")
-
-    # TODO: Verificar que el user_id a seguir existe llamando al servicio de usuarios
-
-    db_follow = models.FollowerDB(follower_id=current_user_id, followed_id=user_id)
-    db.add(db_follow)
-    db.commit()
+    repository.follow_user(db, follower_id=current_user_id, followed_id=user_id)
     return
 
 @router.delete("/users/{user_id}/follow", status_code=status.HTTP_204_NO_CONTENT)
@@ -92,25 +68,18 @@ def unfollow_user(
     current_user_id: int = Depends(auth.get_current_user_id)
 ):
     """Permite al usuario actual dejar de seguir a otro usuario."""
-    db_follow = db.query(models.FollowerDB).filter_by(follower_id=current_user_id, followed_id=user_id).first()
-    if not db_follow:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="You are not following this user")
-
-    db.delete(db_follow)
-    db.commit()
+    repository.unfollow_user(db, follower_id=current_user_id, followed_id=user_id)
     return
 
 @router.get("/users/{user_id}/followers", response_model=List[int])
 def get_followers(user_id: int, db: Session = Depends(database.get_db)):
     """Obtiene la lista de IDs de los seguidores de un usuario."""
-    followers = db.query(models.FollowerDB.follower_id).filter(models.FollowerDB.followed_id == user_id).all()
-    return [f.follower_id for f in followers]
+    return repository.get_followers(db, user_id=user_id)
 
 @router.get("/users/{user_id}/following", response_model=List[int])
 def get_following(user_id: int, db: Session = Depends(database.get_db)):
     """Obtiene la lista de IDs de los usuarios que un usuario sigue."""
-    following = db.query(models.FollowerDB.followed_id).filter(models.FollowerDB.follower_id == user_id).all()
-    return [f.followed_id for f in following]
+    return repository.get_following(db, user_id=user_id)
 
 app.include_router(router, prefix="/api/v1")
 

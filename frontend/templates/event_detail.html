@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block title %}{{ event.title if event else 'Detalle del Evento' }}{% endblock %}
+
+{% block content %}
+<main>
+    {% if event %}
+        <h2>{{ event.title }}</h2>
+        <p><strong>Organizado por:</strong> {{ event.organizer_name if event.organizer_name else 'Desconocido' }}</p>
+        <p><strong>Ubicación:</strong> {{ event.location }}</p>
+        <p><strong>Fecha y Hora:</strong> {{ event.event_date | datetimeformat('%A, %d de %B de %Y a las %H:%M') }}</p>
+        
+        {% if event.description %}
+            <p><strong>Descripción:</strong></p>
+            <p style="white-space: pre-wrap;">{{ event.description }}</p>
+        {% endif %}
+
+        <small>Evento publicado el: {{ event.created_at | datetimeformat }}</small>
+
+        {# Aquí se podrían añadir botones para editar/eliminar si el usuario es el organizador #}
+
+    {% else %}
+        <h2>Evento no encontrado</h2>
+        <p>El evento que buscas no existe o no se pudo cargar.</p>
+    {% endif %}
+</main>
+{% endblock %}

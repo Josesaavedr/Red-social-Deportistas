@@ -6,9 +6,11 @@ from fastapi.security import OAuth2PasswordBearer
 
 # Importar los módulos de base de datos, modelos y autenticación
 from . import database, models, auth
+# Importar helpers y configuración
+from common.helpers.utils import send_async_bulk_request
 
 # URL del servicio de usuarios (obtenida de variables de entorno)
-USERS_SVC_URL = os.getenv("USERS_SVC", "http://users:8001")
+USERS_SVC_URL = os.getenv("USERS_SVC_URL", "http://localhost:8001")
 
 app = FastAPI()
 
@@ -32,58 +34,90 @@ def health_check():
 
 # Endpoint para crear un nuevo evento
 @router.post("/events/", response_model=models.Event, status_code=status.HTTP_201_CREATED)
-def create_event(
+async def create_event(
     event: models.EventCreate,
     db: Session = Depends(database.get_db),
     current_user_id: int = Depends(auth.get_current_user_id) # Requiere autenticación
 ):
     """
-    Crea un nuevo evento en la base de datos.
+    Crea un nuevo evento y devuelve el objeto enriquecido.
     El organizador del evento se obtiene del token de autenticación.
     """
     db_event = models.EventDB(**event.dict(), organizer_id=current_user_id)
     db.add(db_event)
     db.commit()
     db.refresh(db_event)
-    return db_event
+
+    # Enriquecer la respuesta con el nombre del organizador
+    users_map = await send_async_bulk_request(f"{USERS_SVC_URL}/api/v1/users/bulk", [db_event.organizer_id])
+    
+    event_data = models.Event.from_orm(db_event)
+    organizer_info = users_map.get(db_event.organizer_id)
+    event_data.organizer_name = organizer_info.get("username") if organizer_info else f"Usuario {db_event.organizer_id}"
+
+    return event_data
 
 # Endpoint para obtener todos los eventos
 @router.get("/events/", response_model=List[models.Event])
-def read_events(
+async def read_events(
     skip: int = 0,
     limit: int = 100,
     db: Session = Depends(database.get_db)
 ):
     """
-    Obtiene una lista de eventos de la base de datos.
+    Obtiene una lista de eventos, enriquecida con los nombres de los organizadores.
     """
-    events = db.query(models.EventDB).offset(skip).limit(limit).all()
-    return events
+    events_db = db.query(models.EventDB).offset(skip).limit(limit).all()
+    
+    # 1. Recolectar IDs de organizadores
+    organizer_ids = list(set(event.organizer_id for event in events_db))
+
+    # 2. Obtener datos de usuarios en lote
+    users_map = await send_async_bulk_request(f"{USERS_SVC_URL}/api/v1/users/bulk", organizer_ids)
+
+    # 3. Enriquecer y devolver eventos
+    enriched_events = []
+    for event_db in events_db:
+        event_data = models.Event.from_orm(event_db)
+        organizer_info = users_map.get(event_db.organizer_id)
+        event_data.organizer_name = organizer_info.get("username") if organizer_info else f"Usuario {event_db.organizer_id}"
+        enriched_events.append(event_data)
+        
+    return enriched_events
 
 # Endpoint para obtener un evento específico por su ID
 @router.get("/events/{event_id}", response_model=models.Event)
-def read_event(
+async def read_event(
     event_id: int,
     db: Session = Depends(database.get_db)
 ):
     """
-    Obtiene los detalles de un evento específico por su ID.
+    Obtiene los detalles de un evento, enriquecido con el nombre del organizador.
     """
     db_event = db.query(models.EventDB).filter(models.EventDB.id == event_id).first()
     if db_event is None:
         raise HTTPException(status_code=404, detail="Event not found")
-    return db_event
+
+    # Obtener datos del organizador
+    users_map = await send_async_bulk_request(f"{USERS_SVC_URL}/api/v1/users/bulk", [db_event.organizer_id])
+    
+    # Enriquecer y devolver el evento
+    event_data = models.Event.from_orm(db_event)
+    organizer_info = users_map.get(db_event.organizer_id)
+    event_data.organizer_name = organizer_info.get("username") if organizer_info else f"Usuario {db_event.organizer_id}"
+    
+    return event_data
 
 # Endpoint para actualizar un evento
 @router.put("/events/{event_id}", response_model=models.Event)
-def update_event(
+async def update_event(
     event_id: int,
     event: models.EventUpdate,
     db: Session = Depends(database.get_db),
     current_user_id: int = Depends(auth.get_current_user_id) # Requiere autenticación
 ):
     """
-    Actualiza un evento existente en la base de datos.
+    Actualiza un evento existente y devuelve el objeto enriquecido.
     Solo el organizador original puede actualizar su evento.
     """
     db_event = db.query(models.EventDB).filter(models.EventDB.id == event_id).first()
@@ -101,7 +135,15 @@ def update_event(
     
     db.commit()
     db.refresh(db_event)
-    return db_event
+
+    # Enriquecer la respuesta con el nombre del organizador
+    users_map = await send_async_bulk_request(f"{USERS_SVC_URL}/api/v1/users/bulk", [db_event.organizer_id])
+    
+    event_data = models.Event.from_orm(db_event)
+    organizer_info = users_map.get(db_event.organizer_id)
+    event_data.organizer_name = organizer_info.get("username") if organizer_info else f"Usuario {db_event.organizer_id}"
+
+    return event_data
 
 # Endpoint para eliminar un evento
 @router.delete("/events/{event_id}", status_code=status.HTTP_204_NO_CONTENT)

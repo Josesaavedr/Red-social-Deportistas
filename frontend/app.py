@@ -1,16 +1,21 @@
 # /frontend/app.py
 
 from flask import Flask, render_template, request, redirect, url_for, session, flash
+from flask_wtf.csrf import CSRFProtect
 from datetime import datetime
 import requests
 import os
 from common.config import settings # Importa la configuración global
 from functools import wraps
+from urllib.parse import urlparse, urljoin
 
 app = Flask(__name__)
 # Es crucial para usar sesiones de forma segura.
 # En producción, esto debería ser una cadena larga y aleatoria.
 app.secret_key = os.getenv("FLASK_SECRET_KEY", "super-secret-key-for-dev")
+
+# --- Mejoras de Seguridad y Configuración ---
+csrf = CSRFProtect(app) # Inicializa la protección CSRF
 
 ACTIVITIES_PER_PAGE = 9
 
@@ -30,7 +35,6 @@ def index():
             return value # Devuelve el valor original si no se puede parsear
     app.jinja_env.filters['datetimeformat'] = format_datetime_filter
 
-    """Ruta de la página de inicio."""
 
     page = request.args.get('page', 1, type=int)
     skip = (page - 1) * ACTIVITIES_PER_PAGE
@@ -39,24 +43,16 @@ def index():
     total_activities = 0
 
     try:
-        # 1. Obtener el número total de actividades
-        count_response = requests.get(f"{settings.API_GATEWAY_URL}/api/v1/activities/count")
-        count_response.raise_for_status()
-        total_activities = count_response.json().get('total', 0) # type: ignore
-
-        # Obtener el token de la sesión para pasarlo al servicio de actividades
-        headers = get_auth_headers() if 'token' in session else {}
-
-        # 2. Obtener las actividades para la página actual
-        if total_activities > 0:
-            activities_response = requests.get(
-                f"{settings.API_GATEWAY_URL}/api/v1/activities/?skip={skip}&limit={ACTIVITIES_PER_PAGE}"
-            )
-            activities_response = requests.get(f"{settings.API_GATEWAY_URL}/api/v1/activities/?skip={skip}&limit={ACTIVITIES_PER_PAGE}", headers=headers)
-            activities = activities_response.json()
-
-    except requests.exceptions.RequestException as e:
-        print(f"Error al conectar con el API Gateway para obtener actividades: {e}")
+        # Usamos la función centralizada para hacer la petición
+        success, data, status_code = api_request("get", f"api/v1/activities/count")
+        if success:
+            total_activities = data.get('total', 0)
+            if total_activities > 0:
+                success_act, activities_data, _ = api_request("get", f"api/v1/activities/?skip={skip}&limit={ACTIVITIES_PER_PAGE}")
+                if success_act:
+                    activities = activities_data
+    except Exception as e:
+        print(f"Error al obtener actividades: {e}")
         activities = []
         total_activities = 0
 
@@ -65,6 +61,14 @@ def index():
     # Pasa los datos a la plantilla para renderizarlos.
     return render_template("index.html", title="Inicio", activities=activities, page=page, total_pages=total_pages)
 
+# --- Funciones de Utilidad y Seguridad ---
+
+def is_safe_url(target):
+    """Valida que una URL de redirección sea segura y pertenezca al mismo host."""
+    ref_url = urlparse(request.host_url)
+    test_url = urlparse(urljoin(request.host_url, target))
+    return test_url.scheme in ('http', 'https') and ref_url.netloc == test_url.netloc
+
 def login_required(f):
     """
     Decorador para proteger rutas que requieren autenticación.
@@ -72,12 +76,51 @@ def login_required(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
         if 'token' not in session:
-            return redirect(url_for('login', next=request.url))
+            flash("Debes iniciar sesión para ver esta página.", "warning")
+            # Valida la URL 'next' para evitar redirecciones abiertas
+            next_url = request.url
+            if not is_safe_url(next_url):
+                next_url = url_for('index')
+            return redirect(url_for('login', next=next_url))
         return f(*args, **kwargs)
     return decorated_function
 
 def get_auth_headers():
+    """Obtiene las cabeceras de autenticación si el usuario ha iniciado sesión."""
+    if 'token' not in session:
+        return {}
     return {"Authorization": f"Bearer {session.get('token')}"}
+
+def api_request(method, endpoint, json=None, data=None):
+    """Función centralizada para realizar peticiones al API Gateway."""
+    url = f"{settings.API_GATEWAY_URL}/{endpoint}"
+    headers = get_auth_headers()
+    
+    try:
+        response = requests.request(method, url, headers=headers, json=json, data=data, timeout=10)
+        response.raise_for_status() # Lanza HTTPError para respuestas 4xx/5xx
+        
+        # Manejar respuestas sin contenido (ej. 204 No Content)
+        if response.status_code == 204:
+            return True, None, 204
+
+        return True, response.json(), response.status_code
+
+    except requests.exceptions.HTTPError as e:
+        # El error viene del API Gateway (ej. 401, 403, 404, 409)
+        error_details = "Error desconocido."
+        try:
+            # Intenta obtener el detalle del error desde la respuesta JSON
+            error_details = e.response.json().get("detail", error_details)
+        except (ValueError, AttributeError):
+            error_details = e.response.text
+        print(f"Error HTTP {e.response.status_code} en {method.upper()} {url}: {error_details}")
+        return False, {"detail": error_details}, e.response.status_code
+    except requests.exceptions.RequestException as e:
+        # Error de conexión, timeout, etc.
+        print(f"Error de conexión en {method.upper()} {url}: {e}")
+        return False, {"detail": "No se pudo conectar con el servidor. Inténtalo más tarde."}, 503
+
 
 @app.route("/new-item", methods=["GET", "POST"])
 def new_item():
@@ -89,24 +132,19 @@ def new_item():
 
         # Validación básica de los datos del formulario
         if not title or not content:
-            return "Error: Título y Detalles son requeridos.", 400
+            flash("Error: Título y Detalles son requeridos.", "danger")
+            return redirect(url_for('new_item'))
 
-        activity_data = {
-            "title": title,
-            "content": content
-        }
+        activity_data = {"title": title, "content": content}
         
-        # Envía los datos al API Gateway para crear una nueva actividad.
-        try:
-            response = requests.post(f"{settings.API_GATEWAY_URL}/api/v1/activities/", json=activity_data, headers=get_auth_headers())
-            response.raise_for_status() # Lanza un error para códigos de estado 4xx/5xx
+        success, data, status_code = api_request("post", "api/v1/activities/", json=activity_data)
+
+        if success:
             flash("¡Actividad registrada con éxito!", "success")
-            return redirect(url_for("index")) # TODO: Debería redirigir a la página de detalles de la nueva actividad
-        except requests.exceptions.RequestException as e:
-            print(f"Error al registrar la actividad: {e}")
-            if hasattr(e, 'response') and e.response is not None:
-                print(f"Respuesta del API Gateway: {e.response.text}")
-            flash("Error al registrar la actividad. Por favor, inténtalo de nuevo más tarde.", "danger")
+            # Redirige a la página de detalles de la nueva actividad
+            return redirect(url_for("activity_detail", activity_id=data['id']))
+        else:
+            flash(f"Error al registrar la actividad: {data.get('detail')}", "danger")
             return redirect(url_for('new_item'))
 
     return render_template("form.html", title="Registrar Nueva Actividad")
@@ -115,20 +153,14 @@ def new_item():
 @login_required
 def delete_activity(activity_id):
     """Ruta para eliminar una actividad."""
-    try:
-        # Envía la petición DELETE al API Gateway
-        response = requests.delete(f"{settings.API_GATEWAY_URL}/api/v1/activities/{activity_id}", headers=get_auth_headers())
-        response.raise_for_status() # Lanza un error para códigos de estado 4xx/5xx
-        flash("Actividad eliminada correctamente.", "success")
-        # Redirige a la página de inicio después de eliminar
-        return redirect(url_for("index"))
-    except requests.exceptions.RequestException as e:
-        print(f"Error al eliminar la actividad: {e}")
-        if hasattr(e, 'response') and e.response is not None:
-            print(f"Respuesta del API Gateway: {e.response.text}")
-        flash("Error al eliminar la actividad. Solo el autor puede eliminarla.", "danger")
-        return redirect(request.referrer or url_for('index'))
+    success, data, status_code = api_request("delete", f"api/v1/activities/{activity_id}")
 
+    if success:
+        flash("Actividad eliminada correctamente.", "success")
+        return redirect(url_for("index"))
+    else:
+        flash(f"Error al eliminar la actividad: {data.get('detail')}", "danger")
+        return redirect(request.referrer or url_for('index'))
 @app.route("/activity/<int:activity_id>")
 def activity_detail(activity_id):
     """Ruta para ver los detalles de una actividad específica."""
@@ -136,22 +168,19 @@ def activity_detail(activity_id):
     try:
         # 1. Obtener los detalles de la actividad
         headers = get_auth_headers() if 'token' in session else {}
-        response = requests.get(f"{settings.API_GATEWAY_URL}/api/v1/activities/{activity_id}", headers=headers)
-        response.raise_for_status()
-        activity = response.json()
+        success_act, activity_data, _ = api_request("get", f"api/v1/activities/{activity_id}")
+        if not success_act:
+            return render_template("error.html", message=activity_data.get('detail', 'Actividad no encontrada.')), 404
+        activity = activity_data
 
         # 2. Obtener los comentarios de la actividad
-        comments_response = requests.get(f"{settings.API_GATEWAY_URL}/api/v1/activities/{activity_id}/comments")
-        comments_response.raise_for_status()
-        comments = comments_response.json()
+        success_com, comments_data, _ = api_request("get", f"api/v1/activities/{activity_id}/comments")
+        if success_com:
+            comments = comments_data
 
     except requests.exceptions.RequestException as e:
         print(f"Error al obtener los detalles de la actividad: {e}")
-        # Puedes manejar el error mostrando una página de error específica
-        return "Error al cargar la actividad o la actividad no existe.", 404
-
-    if not activity:
-        return "Actividad no encontrada.", 404
+        return render_template("error.html", message="Error al cargar la actividad."), 500
 
     return render_template("activity_detail.html", title=activity.get('title', 'Detalle de Actividad'), activity=activity, comments=comments)
 
@@ -161,14 +190,14 @@ def add_comment(activity_id):
     """Ruta para añadir un nuevo comentario a una actividad."""
     content = request.form.get("content")
     if not content:
-        return "Error: El contenido del comentario es requerido.", 400
+        flash("El contenido del comentario es requerido.", "warning")
+        return redirect(url_for('activity_detail', activity_id=activity_id))
 
-    try:
-        response = requests.post(f"{settings.API_GATEWAY_URL}/api/v1/activities/{activity_id}/comments", json={"content": content}, headers=get_auth_headers())
-        response.raise_for_status()
-    except requests.exceptions.RequestException as e:
-        print(f"Error al añadir el comentario: {e}")
-        flash("Error al publicar el comentario.", "danger")
+    success, data, _ = api_request("post", f"api/v1/activities/{activity_id}/comments", json={"content": content})
+    if success:
+        flash("Comentario añadido.", "success")
+    else:
+        flash(f"Error al publicar el comentario: {data.get('detail')}", "danger")
 
     return redirect(url_for('activity_detail', activity_id=activity_id))
 
@@ -183,31 +212,20 @@ def edit_activity(activity_id):
             "content": request.form.get("content")
         }
 
-        try:
-            # Envía la petición PUT al API Gateway
-            response = requests.put(f"{settings.API_GATEWAY_URL}/api/v1/activities/{activity_id}", json=updated_data, headers=get_auth_headers())
-            response.raise_for_status()
+        success, data, _ = api_request("put", f"api/v1/activities/{activity_id}", json=updated_data)
+
+        if success:
             flash("Actividad actualizada correctamente.", "success")
-            # Redirige a la página de detalles después de editar
             return redirect(url_for('activity_detail', activity_id=activity_id))
-        except requests.exceptions.RequestException as e:
-            print(f"Error al actualizar la actividad: {e}")
-            flash("Error al actualizar la actividad. Solo el autor puede editarla.", "danger")
+        else:
+            flash(f"Error al actualizar la actividad: {data.get('detail')}", "danger")
             return redirect(url_for('edit_activity', activity_id=activity_id))
 
     # Método GET: Muestra el formulario de edición
-    activity = None
-    try:
-        # Llama al API Gateway para obtener los datos actuales de la actividad
-        response = requests.get(f"{settings.API_GATEWAY_URL}/api/v1/activities/{activity_id}")
-        response.raise_for_status()
-        activity = response.json()
-    except requests.exceptions.RequestException as e:
-        print(f"Error al obtener la actividad para editar: {e}")
-        return "Error al cargar la actividad para editar.", 404
-
-    if not activity:
-        return "Actividad no encontrada.", 404
+    success, activity, status_code = api_request("get", f"api/v1/activities/{activity_id}")
+    if not success:
+        flash(f"No se pudo cargar la actividad para editar: {activity.get('detail')}", "danger")
+        return redirect(url_for('index'))
 
     return render_template("edit_activity.html", activity=activity)
 
@@ -215,17 +233,14 @@ def edit_activity(activity_id):
 @login_required
 def like_activity(activity_id):
     """Ruta para dar 'Me gusta' a una actividad."""
-    try:
-        response = requests.post(f"{settings.API_GATEWAY_URL}/api/v1/activities/{activity_id}/like", headers=get_auth_headers())
-        if response.status_code == 409: # Conflicto, ya le dio "Me gusta"
-            flash("Ya has indicado que te gusta esta actividad.", "info")
-        else:
-            response.raise_for_status()
-            flash("¡Gracias por tu 'Me gusta'!", "success")
-    except requests.exceptions.RequestException as e:
-        print(f"Error al dar 'Me gusta' a la actividad: {e}")
-        flash("No se pudo registrar tu 'Me gusta'.", "danger")
+    success, data, status_code = api_request("post", f"api/v1/activities/{activity_id}/like")
     
+    if success:
+        flash("¡Gracias por tu 'Me gusta'!", "success")
+    elif status_code == 409: # Conflicto
+        flash("Ya has indicado que te gusta esta actividad.", "info")
+    else:
+        flash(f"No se pudo registrar tu 'Me gusta': {data.get('detail')}", "danger")
     # Redirige al usuario a la página desde la que vino
     return redirect(request.referrer or url_for('index'))
 
@@ -233,18 +248,14 @@ def like_activity(activity_id):
 @login_required
 def unlike_activity(activity_id):
     """Ruta para quitar 'Me gusta' a una actividad."""
-    try:
-        # Llama al endpoint DELETE del API Gateway
-        response = requests.delete(f"{settings.API_GATEWAY_URL}/api/v1/activities/{activity_id}/like", headers=get_auth_headers())
-        if response.status_code == 404: # No se encontró el "like" para eliminar
-            flash("No habías indicado que te gusta esta actividad.", "info")
-        else:
-            response.raise_for_status()
-            flash("Has quitado tu 'Me gusta'.", "success")
-    except requests.exceptions.RequestException as e:
-        print(f"Error al quitar 'Me gusta' a la actividad: {e}")
-        flash("No se pudo quitar tu 'Me gusta'.", "danger")
-    
+    success, data, status_code = api_request("delete", f"api/v1/activities/{activity_id}/like")
+
+    if success:
+        flash("Has quitado tu 'Me gusta'.", "success")
+    elif status_code == 404:
+        flash("No habías indicado que te gusta esta actividad.", "info")
+    else:
+        flash(f"No se pudo quitar tu 'Me gusta': {data.get('detail')}", "danger")
     return redirect(request.referrer or url_for('index'))
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -254,26 +265,21 @@ def login():
         email = request.form.get('email')
         password = request.form.get('password')
         
-        try:
-            # El servicio de usuarios espera los datos en formato 'form-data' para OAuth2
-            login_data = {'username': email, 'password': password}
-            # Asumiendo que el gateway expone el endpoint de token del servicio de usuarios
-            response = requests.post(f"{settings.API_GATEWAY_URL}/api/v1/users/token", data=login_data)
-            response.raise_for_status()
-            
-            token_data = response.json()
-            session['token'] = token_data.get('access_token')
-            
-            # Opcional: decodificar el token para obtener el user_id y guardarlo
-            # from jose import jwt
-            # payload = jwt.decode(session['token'], os.getenv("JWT_SECRET"), algorithms=["HS256"])
-            # session['user_id'] = payload.get('sub')
+        # El servicio de usuarios espera los datos en formato 'form-data' para OAuth2
+        login_data = {'username': email, 'password': password}
+        success, token_data, status_code = api_request("post", "api/v1/users/token", data=login_data)
 
+        if success:
+            session['token'] = token_data.get('access_token')
             flash("Has iniciado sesión correctamente.", "success")
+            
+            next_page = request.args.get('next')
+            if next_page and is_safe_url(next_page):
+                return redirect(next_page)
             return redirect(url_for('index'))
-        except requests.exceptions.RequestException as e:
-            print(f"Error en el inicio de sesión: {e}")
-            flash("Correo o contraseña incorrectos.", "danger")
+        else:
+            error_msg = token_data.get('detail', 'Correo o contraseña incorrectos.')
+            flash(error_msg, "danger")
             return redirect(url_for('login'))
 
     return render_template('login.html', title="Iniciar Sesión")
@@ -287,16 +293,13 @@ def register():
             "email": request.form.get('email'),
             "password": request.form.get('password')
         }
-        try:
-            # Asumiendo que el gateway expone el endpoint de registro del servicio de usuarios
-            response = requests.post(f"{settings.API_GATEWAY_URL}/api/v1/users/register", json=user_data)
-            response.raise_for_status()
+        success, data, status_code = api_request("post", "api/v1/users/register", json=user_data)
+
+        if success:
             flash("¡Cuenta creada con éxito! Por favor, inicia sesión.", "success")
-            # Redirigir a la página de login después de un registro exitoso
             return redirect(url_for('login'))
-        except requests.exceptions.RequestException as e:
-            print(f"Error en el registro: {e}")
-            flash("Error al registrar el usuario. El correo puede que ya esté en uso.", "danger")
+        else:
+            flash(f"Error al registrar el usuario: {data.get('detail')}", "danger")
             return redirect(url_for('register'))
 
     return render_template('register.html', title="Registrarse")
@@ -307,6 +310,42 @@ def logout():
     session.clear()
     flash("Has cerrado la sesión.", "info")
     return redirect(url_for('index'))
+
+# --- Rutas para Eventos ---
+
+@app.route("/events")
+def list_events():
+    """Muestra una lista de todos los eventos."""
+    events = []
+    success, data, _ = api_request("get", "api/v1/events/")
+    if success:
+        events = data
+    else:
+        flash(f"No se pudieron cargar los eventos: {data.get('detail')}", "danger")
+    
+    return render_template("events_list.html", title="Eventos", events=events)
+
+@app.route("/event/<int:event_id>")
+def event_detail(event_id):
+    """Muestra los detalles de un evento específico."""
+    success, event, status_code = api_request("get", f"api/v1/events/{event_id}")
+    if not success:
+        flash(f"No se pudo cargar el evento: {event.get('detail')}", "danger")
+        return redirect(url_for('list_events'))
+        
+    return render_template("event_detail.html", title=event.get('title', 'Detalle del Evento'), event=event)
+
+# --- Manejadores de Errores Globales ---
+
+@app.errorhandler(404)
+def page_not_found(e):
+    """Renderiza una página 404 personalizada."""
+    return render_template('error.html', message="Página no encontrada.", title="Error 404"), 404
+
+@app.errorhandler(500)
+def internal_server_error(e):
+    """Renderiza una página 500 personalizada."""
+    return render_template('error.html', message="Ha ocurrido un error interno en el servidor.", title="Error 500"), 500
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000)

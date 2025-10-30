@@ -1,13 +1,13 @@
 from typing import Optional, Dict, Any
 import os
 import time
-import asyncio
 import logging
 
 from fastapi import FastAPI, Request, HTTPException, Depends, Header, Response
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse, StreamingResponse
 import httpx
+import redis.asyncio as redis
 import jwt
 
 # --- Configuración básica ---
@@ -23,46 +23,60 @@ SOCIAL_SVC = os.getenv("SOCIAL_SVC", "http://social:8006")
 
 JWT_SECRET = os.getenv("JWT_SECRET", "changeme")
 JWT_ALGORITHM = os.getenv("JWT_ALGORITHM", "HS256")
+ALLOWED_ORIGINS = os.getenv("ALLOWED_ORIGINS", "http://localhost:5000").split(",")
 
-# Rate limiting (simple, in-memory token bucket per IP)
-RATE_LIMIT_CAPACITY = int(os.getenv("RATE_LIMIT_CAPACITY", "60"))  # requests
-RATE_LIMIT_REFILL_SECONDS = int(os.getenv("RATE_LIMIT_REFILL_SECONDS", "60"))
+# --- Configuración de Rate Limiting con Redis ---
+REDIS_URL = os.getenv("REDIS_URL", "redis://localhost:6379")
+RATE_LIMIT_PER_MINUTE = int(os.getenv("RATE_LIMIT_PER_MINUTE", "100"))
 
-# In-memory store: {key: (tokens, last_ts)}
-_rate_store: Dict[str, Dict[str, Any]] = {}
-_rate_lock = asyncio.Lock()
+# --- Definición de Rutas y Servicios ---
+SERVICE_MAP = {
+    "users": {"url": USERS_SVC, "public_paths": ["/token", "/register"]},
+    "posts": {"url": POSTS_SVC},
+    "activities": {"url": ACTIVITIES_SVC, "public_paths": ["/"]},
+    "messages": {"url": MESSAGES_SVC},
+    "events": {"url": EVENTS_SVC},
+    "social": {"url": SOCIAL_SVC},
+}
 
 app = FastAPI(title="API Gateway - Red Social Deportistas", version="1.0")
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=ALLOWED_ORIGINS,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-# Shared async HTTP client
-client = httpx.AsyncClient(timeout=httpx.Timeout(10.0, connect=5.0))
+# --- Clientes y Conexiones ---
+
+# Cliente Redis para Rate Limiting
+redis_client = redis.from_url(REDIS_URL, encoding="utf-8", decode_responses=True)
+
+# Cliente HTTP asíncrono compartido con reintentos y pool de conexiones
+retries = httpx.Limits(max_keepalives=10, max_connections=100)
+transport = httpx.AsyncHTTPTransport(retries=3) # Reintenta 3 veces en fallos de conexión
+client = httpx.AsyncClient(transport=transport, timeout=httpx.Timeout(15.0, connect=5.0))
 
 # ---------------------- Utilidades ----------------------
-async def check_rate_limit(key: str):
-    async with _rate_lock:
-        now = time.time()
-        entry = _rate_store.get(key)
-        if not entry:
-            _rate_store[key] = {"tokens": RATE_LIMIT_CAPACITY - 1, "last": now}
-            return True
-        # refill
-        elapsed = now - entry["last"]
-        refill = (elapsed / RATE_LIMIT_REFILL_SECONDS) * RATE_LIMIT_CAPACITY
-        if refill > 0:
-            entry["tokens"] = min(RATE_LIMIT_CAPACITY, entry["tokens"] + refill)
-            entry["last"] = now
-        if entry["tokens"] >= 1:
-            entry["tokens"] -= 1
-            return True
-        return False
+
+async def rate_limit_middleware(key: str) -> bool:
+    """
+    Implementación de Rate Limiting con Redis usando el algoritmo de ventana deslizante.
+    """
+    try:
+        # Usamos un pipeline para ejecutar comandos de forma atómica
+        p = redis_client.pipeline()
+        # Clave única para el minuto actual
+        current_minute_key = f"rate_limit:{key}:{int(time.time() / 60)}"
+        p.incr(current_minute_key)
+        p.expire(current_minute_key, 60) # La clave expira en 60 segundos
+        count = (await p.execute())[0]
+        return count <= RATE_LIMIT_PER_MINUTE
+    except redis.RedisError as e:
+        logger.error(f"Error de Redis en Rate Limiting: {e}")
+        return True # Falla en modo abierto para no bloquear a los usuarios si Redis cae
 
 def verify_jwt(token: str) -> Dict[str, Any]:
     try:
@@ -81,32 +95,45 @@ async def get_bearer_token(authorization: Optional[str] = Header(None)) -> Optio
         return parts[1]
     return None
 
-async def proxy_request(request: Request, base_url: str, path: str, headers: dict):
-    """Reenvía la petición al microservicio destino y devuelve la respuesta"""
-    # Build URL
-    url = base_url.rstrip("/") + "/" + path.lstrip("/")
+def get_service_for_path(path: str) -> Optional[Dict[str, Any]]:
+    """Determina el servicio y la ruta interna a partir de la ruta completa."""
+    parts = path.strip("/").split("/", 1)
+    service_prefix = parts[0]
+    
+    if service_prefix in SERVICE_MAP:
+        service_config = SERVICE_MAP[service_prefix]
+        internal_path = f"/{parts[1]}" if len(parts) > 1 else "/"
+        return {
+            "url": service_config["url"],
+            "path": internal_path,
+            "public_paths": service_config.get("public_paths", [])
+        }
+    return None
 
+async def proxy_request(request: Request, service_url: str, path: str):
+    """Reenvía la petición al microservicio destino y devuelve la respuesta"""
+    url = f"{service_url}{path}"
     method = request.method
     body = request.stream()
+    query_params = request.query_params
+    
+    # Copia cabeceras, eliminando las que no deben ser reenviadas (hop-by-hop)
+    headers_to_forward = {
+        k: v for k, v in request.headers.items() 
+        if k.lower() not in ("host", "connection", "keep-alive", "proxy-authenticate", 
+                             "proxy-authorization", "te", "trailer", "transfer-encoding", "upgrade")
+    }
 
     try:
-        # Set a small retry policy for idempotent methods
-        attempts = 2 if method in ("GET", "HEAD", "OPTIONS", "PUT", "DELETE") else 1
-        for attempt in range(attempts):
-            try:
-                req = client.build_request(method, url, headers=headers, content=body, params=dict(request.query_params))
-                resp = await client.send(req, stream=True)
-                break
-            except (httpx.ConnectError, httpx.ReadTimeout) as e:
-                logger.warning(f"Attempt {attempt+1} failed for {url}: {e}")
-                if attempt == attempts - 1:
-                    raise
-                await asyncio.sleep(0.2)
-        # Stream response back
+        # Construye y envía la petición al servicio destino
+        req = client.build_request(method, url, headers=headers_to_forward, content=body, params=query_params)
+        resp = await client.send(req, stream=True)
+        
+        # Devuelve la respuesta en streaming para mayor eficiencia
         return StreamingResponse(resp.aiter_bytes(), status_code=resp.status_code, headers=resp.headers)
     except httpx.HTTPError as e:
-        logger.exception("Error proxying request")
-        raise HTTPException(status_code=502, detail="Bad gateway")
+        logger.error(f"Error al contactar el servicio {url}: {e}")
+        raise HTTPException(status_code=502, detail=f"Error al contactar el servicio: {e.__class__.__name__}")
 
 # ---------------------- Endpoints ----------------------
 
@@ -116,8 +143,7 @@ async def add_logging_and_rate_limit(request: Request, call_next):
     client_host = request.client.host if request.client else "unknown"
     # No aplicar rate limit a la ruta de health check
     if request.url.path != "/health":
-        key = client_host
-        allowed = await check_rate_limit(key)
+        allowed = await rate_limit_middleware(client_host)
         if not allowed:
             return JSONResponse(status_code=429, content={"detail": "Rate limit exceeded"})
     logger.info(f"{request.method} {request.url} from {client_host}")
@@ -143,47 +169,31 @@ async def health():
 # Centralized routing and proxying
 @app.api_route("/{full_path:path}", methods=["GET", "POST", "PUT", "DELETE", "PATCH"])
 async def catch_all(full_path: str, request: Request, token: Optional[str] = Depends(get_bearer_token)):
-    # Define public routes that do not require a token
-    public_routes = [
-        ("POST", "users/login"),
-        ("POST", "users/register"),
-    ]
-
-    is_public = any(
-        request.method == method and full_path.startswith(path)
-        for method, path in public_routes
-    )
-
-    # Route mapping
-    service_map = {
-        "users": USERS_SVC,
-        "posts": POSTS_SVC,
-        "activities": ACTIVITIES_SVC,
-        "messages": MESSAGES_SVC,
-        "events": EVENTS_SVC,
-        "social": SOCIAL_SVC,
-    }
-
-    # Determine target service
-    service_prefix = full_path.split('/')[0]
-    base_url = service_map.get(service_prefix)
-
-    if not base_url:
+    # 1. Determinar el servicio de destino
+    service_info = get_service_for_path(full_path)
+    if not service_info:
         raise HTTPException(status_code=404, detail="Not found in gateway")
 
+    # 2. Verificar si la ruta es pública
+    is_public = service_info["path"] in service_info["public_paths"]
+    
+    # Las rutas de actividades son públicas para lectura (GET)
+    if service_info["url"] == ACTIVITIES_SVC and request.method == "GET":
+        is_public = True
+
+    # 3. Validar autenticación para rutas no públicas
     if not is_public:
         if not token:
             raise HTTPException(status_code=401, detail="Not authenticated")
         payload = verify_jwt(token)
-        # TODO: Add more granular role-based access control here if needed
+        # Aquí se podría añadir lógica de autorización basada en roles (ej. payload.get('roles'))
 
-    # Copy headers - remove hop-by-hop headers
-    headers = {k: v for k, v in request.headers.items() if k.lower() not in
-               ("host", "connection", "keep-alive", "proxy-authenticate", "proxy-authorization", "te", "trailer", "transfer-encoding", "upgrade")}
-
-    return await proxy_request(request, base_url, full_path, headers)
+    # 4. Reenviar la petición al servicio correspondiente
+    # El path que se pasa al servicio es el path completo original
+    return await proxy_request(request, service_info["url"], full_path)
 
 # Shutdown: close httpx client
 @app.on_event("shutdown")
 async def shutdown_event():
+    await redis_client.close()
     await client.aclose()

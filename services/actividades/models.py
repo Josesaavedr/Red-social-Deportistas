@@ -53,9 +53,9 @@ class Activity(ActivityBase):
     id: int
     created_at: datetime
     likes: int
-    # Opcional: Incluir comentarios y likers si se cargan explícitamente en la consulta
-    # comments: List["Comment"] = []
-    # likers: List["Like"] = []
+    # Campos enriquecidos que se añadirán antes de enviar la respuesta
+    author_name: Optional[str] = None
+    current_user_has_liked: Optional[bool] = False
 
     class Config:
         orm_mode = True # Permite que Pydantic lea datos desde modelos de SQLAlchemy
@@ -89,6 +89,8 @@ class Comment(CommentCreate):
     created_at: datetime
     activity_id: int
     author_id: int
+    # Campo enriquecido
+    author_name: Optional[str] = None
 
     class Config:
         orm_mode = True
