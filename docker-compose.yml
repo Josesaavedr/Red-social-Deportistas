@@ -1,12 +1,13 @@
-services:
+version: '3.8'
 
+services:
   frontend:
     build: ./frontend
     container_name: frontend
     ports:
       - "5000:5000"
     environment:
-      - API_GATEWAY_URL=http://api-gateway:8000
+      - API_GATEWAY_URL=http://api-gateway:8000 # Flask dev server needs this
     depends_on:
       - api-gateway
 
@@ -15,59 +16,73 @@ services:
     container_name: api-gateway
     ports:
       - "8000:8000"
+    environment:
+      - USERS_SVC=http://users:8001
+      - POSTS_SVC=http://posts:8002
+      - ACTIVITIES_SVC=http://activities:8003
+      - MESSAGES_SVC=http://messages:8004
+      - JWT_SECRET=${JWT_SECRET:-your_jwt_secret}
     depends_on:
-      - auth-service
-    # Aquí puedes agregar los otros servicios base
+      - users
+      - posts
+      - activities
+      - messages
 
-  # Microservicio de Autenticación
-  auth-service:
-    build: ./services/authentication
-    container_name: auth-service
+  # Microservicio de Usuarios (antes auth-service)
+  users:
+    build: ./services/users # TODO: Renombrar 'authentication' a 'users'
+    container_name: users-service
     ports:
       - "8001:8001"
     environment:
-      - DATABASE_URL=mongodb://auth-db:27017/auth_db
+      - DATABASE_URL=mongodb://users-db:27017/users_db
     depends_on:
-      - auth-db
+      - users-db
 
-  # Base de datos para el servicio de autenticación
-  auth-db:
+  # Base de datos para el servicio de usuarios
+  users-db:
     image: mongo:latest
-    container_name: auth-db
+    container_name: users-db
     ports:
       - "27017:27017"
     volumes:
-      - auth_data:/data/db
+      - users_data:/data/db
 
-  # --- Plantillas de Microservicios ---
-  # TODO: Copiar y modificar "service1" para cada servicio según el tema seleccionado
-  
-  # Microservicio de Nombre_del_microservicio
-  service1-service:
-     build: ./services/service1 
-     container_name: service1-service
+  # Microservicio de Publicaciones (Posts)
+  posts:
+     build: ./services/posts # TODO: Renombrar 'service1' a 'posts'
+     container_name: posts-service
      ports:
        - "8002:8002"
      environment:
-       - DATABASE_URL=postgresql://user:password@service1-db:5432/service1_db
+       - DATABASE_URL=postgresql://${POSTGRES_USER:-user}:${POSTGRES_PASSWORD:-password}@posts-db:5432/${POSTGRES_DB:-posts_db}
      depends_on:
-       - service1-db
+       - posts-db
 
-  # Base de datos para el servicio1
-  service1-db:
+  # Base de datos para el servicio de Publicaciones
+  posts-db:
      image: postgres:latest
-     container_name: service1-db
+     container_name: posts-db
      environment:
-       - POSTGRES_USER=user
-       - POSTGRES_PASSWORD=password
-       - POSTGRES_DB=service1_db
+       - POSTGRES_USER=${POSTGRES_USER:-user}
+       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-password}
+       - POSTGRES_DB=${POSTGRES_DB:-posts_db}
      ports:
-       - "5432:5432"
+       - "5432:5432" # Exponer solo si se necesita acceso externo
      volumes:
-       - service1_data:/var/lib/postgresql/data
+       - posts_data:/var/lib/postgresql/data
+
+  # TODO: Definir los servicios 'activities' y 'messages' de manera similar
+  activities:
+    image: your_activities_service_image # TODO: Reemplazar con build: ./services/activities
+    restart: unless-stopped
+
+  messages:
+    image: your_messages_service_image # TODO: Reemplazar con build: ./services/messages
+    restart: unless-stopped
 
 volumes:
-  auth_data:
-  service1_data:
-  service2_data:
-  service3_data:
+  users_data:
+  posts_data:
+  activities_data:
+  messages_data:
