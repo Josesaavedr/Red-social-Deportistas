@@ -51,7 +51,7 @@ red-social-deportistas/
 │       ├── style.css
 │       └── scripts.js
 ├── services/
-│   ├── autenticacion/
+│   ├── authentication/
 │   │   ├── main.py
 │   │   ├── models.py
 │   │   └── routers/auth.py
