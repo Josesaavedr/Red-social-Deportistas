@@ -1,12 +1,14 @@
 /* /frontend/static/style.css */
 
 body {
-    font-family: Arial, sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     line-height: 1.6;
     margin: 0;
     padding: 0;
     background-color: #f4f4f4;
     color: #333;
+    /* Añade padding inferior para evitar que el footer fijo oculte contenido */
+    padding-bottom: 5rem; 
 }
 
 header {
@@ -20,15 +22,29 @@ header h1 {
     margin: 0;
 }
 
+nav ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 0.5rem;
+}
+
 nav a {
     color: #fff;
     text-decoration: none;
     margin: 0 15px;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    transition: background-color 0.3s;
 }
 
 main {
     padding: 2rem;
     max-width: 800px;
+    margin-bottom: 2rem;
     margin: auto;
 }
 
@@ -42,12 +58,20 @@ footer {
     bottom: 0;
 }
 
-/* Estilos de formulario */
+/* === Estilos de Formulario === */
 form {
     background: #fff;
     padding: 2rem;
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Formularios en línea para botones (like/unlike) */
+form.like-form, form[style*="inline-block"] {
+    display: inline-block;
+    background: none;
+    padding: 0;
+    box-shadow: none;
 }
 
 label, input, textarea, button {
@@ -60,6 +84,7 @@ input, textarea {
     padding: 0.5rem;
     border: 1px solid #ccc;
     border-radius: 4px;
+    box-sizing: border-box; /* Asegura que el padding no afecte el ancho total */
 }
 
 button {
@@ -70,11 +95,141 @@ button {
     border-radius: 4px;
     cursor: pointer;
 }
-
 button:hover {
     background-color: #4cae4c;
 }
 
+/* === Estilos de Botones Específicos === */
+.like-button, .unlike-button {
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+}
+
+.like-button {
+    background-color: #3498db; /* Azul */
+}
+.like-button:hover {
+    background-color: #2980b9;
+}
+
+.unlike-button {
+    background-color: #e74c3c; /* Rojo */
+}
+.unlike-button:hover {
+    background-color: #c0392b;
+}
+
+.delete-button {
+    background-color: #e74c3c; /* Rojo */
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+}
+.delete-button:hover {
+    background-color: #c0392b;
+}
+
+.edit-button {
+    display: inline-block;
+    background-color: #f39c12; /* Naranja */
+    color: white;
+    padding: 0.5rem 1rem;
+    text-decoration: none;
+    border-radius: 4px;
+    font-size: 0.9rem;
+}
+.edit-button:hover {
+    background-color: #e67e22;
+}
+
+
+/* === Estilos de Tarjetas de Actividad (index.html) === */
+.activity-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.activity-card {
+    background: #fff;
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s;
+}
+.activity-card:hover {
+    transform: translateY(-5px);
+}
+
+.activity-card h3 {
+    margin-top: 0;
+}
+
+.activity-title-link {
+    text-decoration: none;
+    color: #333;
+}
+.activity-title-link:hover {
+    color: #5cb85c;
+}
+
+.card-footer {
+    margin-top: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #777;
+}
+
+.card-footer .actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+
 a {
     color: #5cb85c;
+}
+
+/* === Estilos de Paginación === */
+.pagination {
+    margin-top: 2rem;
+    text-align: center;
+}
+.page-button {
+    text-decoration: none;
+    padding: 0.5rem 1rem;
+    margin: 0 5px;
+    border-radius: 4px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    color: #5cb85c;
+}
+.page-button:hover {
+    background-color: #f4f4f4;
+}
+.page-info {
+    margin: 0 10px;
+    color: #555;
+}
+
+/* === Estilos de Detalles de Actividad y Comentarios === */
+.comment-section {
+    margin-top: 2rem;
+}
+.comment-form {
+    margin-bottom: 2rem;
+}
+.comment-list .comment {
+    background: #fff;
+    padding: 1rem;
+    border-radius: 4px;
+    margin-bottom: 1rem;
+    border-left: 4px solid #5cb85c;
+}
+.comment p {
+    margin: 0.5rem 0;
+}
+.comment small {
+    color: #777;
 }
