@@ -78,10 +78,10 @@ red-social-deportistas/
 
 | Microservicio | Descripción | Base de Datos |
 |----------------|-------------|---------------|
-| **Autenticación** | Registra y autentica usuarios y clubes deportivos. | PostgreSQL |
-| **Actividades** | Gestiona los entrenamientos, estadísticas y logros. | MongoDB |
-| **Social** | Permite publicaciones, comentarios, reacciones y mensajes. | Redis + PostgreSQL |
-| **Eventos** | Administra torneos, competencias y encuentros deportivos. | PostgreSQL |
+| **Autenticación** | Registra y autentica usuarios y clubes deportivos. |SQLAlchemy |
+| **Actividades** | Gestiona los entrenamientos, estadísticas y logros. |SQLAlchemy |
+| **Social** | Permite publicaciones, comentarios, reacciones y mensajes. |SQLAlchemy |
+| **Eventos** | Administra torneos, competencias y encuentros deportivos. | SQLAlchemy|
 
 ---
 
