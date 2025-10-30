@@ -2,71 +2,147 @@
 
 | Código | Nombre | Correo |
 |:---|:---|:---|
-| 542378923 | Fulanito de Tal | fulanito.tal@miuniremington.edu.co |
-| 542378923 | Fulanito de Tal | fulanito.tal@miuniremington.edu.co |
+| 542378923 | jose fernady saavedra duran| jose.saavedra.9076@miremington.edu.co |
+| 542378923 | narciso yunda yunda | narciso.yunda.7718@miremington.edu.co |
 
 ---
 
-## Objetivos del Seminario
+# 🏋️‍♂️ Red Social para Deportistas
 
-* Diseñar microservicios independientes que se comunican entre sí.
-* Implementar API RESTful con FastAPI.
-* Utilizar diferentes tipos de bases de datos para cada microservicio.
-* Implementar un front-end básico para hacer uso de los microservicios.
-* Contenerizar aplicaciones con Docker.
-* Orquestar la infraestructura con Docker Compose.
+Una **plataforma social diseñada para atletas y aficionados al deporte**, donde los usuarios pueden compartir logros, registrar entrenamientos, participar en eventos y conectarse con otros deportistas.  
+Desarrollada con **Python**, **FastAPI**, **Flask**, y **Docker**, bajo una arquitectura de **microservicios escalable**.
 
-## Proceso de Desarrollo
+---
 
-Sigue estos pasos para comenzar tu proyecto:
 
-1. Fork del repositorio https://github.com/UR-CC/plantilla-seminario, con un nombre relacionado con el proyecto de cada grupo.
+---
 
-2. Clonar el repositorio base:
+## 🧩 Descripción del Proyecto
 
-    ```bash
-    git clone https://github.com/USUARIO/nuevo-nombre.git 
-    cd nuevo-nombre
-    ```
+La **Red Social para Deportistas** tiene como objetivo ofrecer un espacio digital interactivo donde cada usuario pueda:
 
-2. Configuración inicial:
-    Crea el archivo de variables de entorno a partir del ejemplo.
+- Crear un perfil deportivo personal o de club.  
+- Registrar sus actividades físicas y entrenamientos.  
+- Compartir publicaciones, logros y experiencias.  
+- Interactuar con otros usuarios mediante comentarios, reacciones y mensajes.  
+- Participar o crear eventos deportivos (torneos, maratones, encuentros, etc.).
 
-    ```bash
-    cp .env.example .env
-    ```
+---
 
-    **Nota**: Asegúrate de configurar las variables de entorno en el archivo `.env` si es necesario.
+## ⚙️ Arquitectura del Sistema
 
-3. Familiarízate con la estructura del proyecto:
-    
-    * `frontend/`: La aplicación web principal (Flask).
-    * `api-gateway/`: El enrutador de peticiones (FastAPI).
-    * `services/`: Directorio donde desarrollarás tus microservicios (FastAPI).
+El sistema está diseñado bajo el enfoque de **microservicios**, lo que permite una mayor escalabilidad, independencia de componentes y facilidad de mantenimiento.
 
-    **Nota**: Hay comentarios `# TODO` que brindan indicaciones de lo que debe implementarse.
+### Estructura General
 
-4. Selecciona uno de los temas propuestos.
-
-5. Renombra los directorios de los microservicios `service[123]` según tu tema en la carpeta `services/`.
-
-6. Revisa los archivos `main.py`, `Dockerfile`, y `requirements.txt` para cada uno de los microservicios.
-
-7. Ajusta el archivo `docker-compose.yml` de tal forma que los servicios y bases de datos coincidan con tu tema.
-
-8. Implementa la lógica de cada microservicio siguiendo los requisitos de tu tema.
-
-    * Define e implementa tu modelo de datos.
-    * Crea los endpoints de las API.
-    * Implementa la comunicación entre servicios.
-    * Conecta cada servicio a su base de datos.
-
-### Ejecutar el Proyecto
-
-Una vez que tengas tus servicios configurados, puedes levantar todo el stack con un solo comando:
-
-```bash
-docker-compose up --build
+```
+red-social-deportistas/
+├── api-gateway/
+│   ├── main.py
+│   ├── Dockerfile
+│   └── requirements.txt
+├── frontend/
+│   ├── app.py
+│   ├── templates/
+│   │   ├── base.html
+│   │   ├── index.html
+│   │   └── perfil.html
+│   └── static/
+│       ├── style.css
+│       └── scripts.js
+├── services/
+│   ├── autenticacion/
+│   │   ├── main.py
+│   │   ├── models.py
+│   │   └── routers/auth.py
+│   ├── actividades/
+│   │   ├── main.py
+│   │   ├── models.py
+│   │   └── routers/actividades.py
+│   ├── social/
+│   │   ├── main.py
+│   │   ├── models.py
+│   │   └── routers/interacciones.py
+│   └── eventos/
+│       ├── main.py
+│       ├── models.py
+│       └── routers/eventos.py
+├── docker-compose.yml
+├── .env.example
+└── README.md
 ```
 
-Esto construirá las imágenes y ejecutará todos los contenedores. Podrás acceder al frontend en `http://localhost:5000` y al API Gateway en `http://localhost:8000`.
+---
+
+## 🧠 Microservicios Implementados
+
+| Microservicio | Descripción | Base de Datos |
+|----------------|-------------|---------------|
+| **Autenticación** | Registra y autentica usuarios y clubes deportivos. | PostgreSQL |
+| **Actividades** | Gestiona los entrenamientos, estadísticas y logros. | MongoDB |
+| **Social** | Permite publicaciones, comentarios, reacciones y mensajes. | Redis + PostgreSQL |
+| **Eventos** | Administra torneos, competencias y encuentros deportivos. | PostgreSQL |
+
+---
+
+## 🚀 Tecnologías Utilizadas
+
+- **Python 3.11+**
+- **FastAPI** – desarrollo de APIs RESTful.
+- **Flask** – frontend liviano.
+- **Docker y Docker Compose** – contenerización y orquestación.
+- **PostgreSQL**, **MongoDB** y **Redis** – bases de datos híbridas.
+- **HTML, CSS y JavaScript** – interfaz de usuario.
+- **Git y GitHub** – control de versiones.
+
+---
+
+## 🧭 Instalación y Ejecución
+
+1. **Clonar el repositorio:**
+   ```bash
+   git clone https://github.com/Josesaavedr/Red-social-Deportistas.git
+   cd red-social-deportistas
+   ```
+
+2. **Configurar variables de entorno:**
+   ```bash
+   cp .env.example .env
+   ```
+   Edita el archivo `.env` con las credenciales necesarias.
+
+3. **Construir y ejecutar los servicios:**
+   ```bash
+   docker-compose up --build
+   ```
+
+4. **Acceder a la aplicación:**
+   - Frontend: [http://localhost:5000](http://localhost:5000)
+   - API Gateway: [http://localhost:8000](http://localhost:8000)
+
+---
+
+## 🧩 Características Clave
+
+- 🔐 Registro e inicio de sesión de usuarios con roles (atleta, club).  
+- 🏃‍♂️ Publicación y seguimiento de entrenamientos.  
+- 💬 Interacción social: comentarios, likes y mensajes.  
+- 🏆 Organización de eventos y competiciones.  
+- 📊 Métricas deportivas personalizadas.  
+- 🌐 Arquitectura basada en microservicios y contenedores.  
+
+---
+
+## 📅 Futuras Mejoras
+
+- Implementación de chat en tiempo real.  
+- Sistema de recomendaciones deportivas.  
+- Integración con APIs de dispositivos fitness (Strava, Garmin, etc.).  
+- Aplicación móvil con Flutter o React Native.  
+
+---
+
+## 📄 Licencia
+
+Este proyecto se distribuye bajo la licencia **MIT**.  
+Puedes usarlo, modificarlo y distribuirlo libremente, siempre que se otorgue el crédito correspondiente al autor.
