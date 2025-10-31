@@ -1,5 +1,7 @@
 
 
+version: "3.9"
+
 services:
   frontend:
     build: ./frontend
@@ -10,19 +12,19 @@ services:
       - API_GATEWAY_URL=http://api-gateway:8000
     depends_on:
       - api-gateway
+    networks:
+      - app-network
 
   api-gateway:
     build: ./api-gateway
     container_name: api-gateway
     ports:
       - "8000:8000"
-    # Las variables de entorno se actualizan para apuntar a los servicios correctos.
-    # POSTS_SVC y MESSAGES_SVC ahora apuntan al servicio 'social'.
     environment:
       - USERS_SVC=http://authentication:8001
-      - POSTS_SVC=http://social:8006 # Apunta al servicio social
+      - POSTS_SVC=http://social:8006
       - ACTIVITIES_SVC=http://actividades:8003
-      - MESSAGES_SVC=http://social:8006 # Apunta al servicio social
+      - MESSAGES_SVC=http://social:8006
       - EVENTS_SVC=http://eventos:8005
       - SOCIAL_SVC=http://social:8006
       - JWT_SECRET=${JWT_SECRET:-your_jwt_secret}
@@ -31,31 +33,119 @@ services:
       - actividades
       - eventos
       - social
+    networks:
+      - app-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
 
-  # El servicio 'users' se renombra a 'authentication' y se corrige la ruta de build.
   authentication:
     build: ./services/authentication
     container_name: authentication
     ports:
       - "8001:8000"
+    environment:
+      - DATABASE_URL=postgresql://postgres:${POSTGRES_PASSWORD:-postgres}@db:5432/auth_db
+    depends_on:
+      - db
+    networks:
+      - app-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
 
-  # Se corrige la ruta de build para el servicio 'activities'.
   actividades:
     build: ./services/actividades
     container_name: actividades
     ports:
       - "8003:8000"
+    networks:
+      - app-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
 
-  # Se corrige la ruta de build para el servicio 'events'.
   eventos:
     build: ./services/eventos
     container_name: eventos
     ports:
       - "8005:8000"
+    networks:
+      - app-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
 
-  # Se corrige la ruta de build para el servicio 'social'.
   social:
     build: ./services/social
     container_name: social
     ports:
       - "8006:8000"
+    environment:
+      - DATABASE_URL=postgresql://postgres:${POSTGRES_PASSWORD:-postgres}@db:5432/social_db
+    depends_on:
+      - db
+    networks:
+      - app-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # 🐘 Servicio de base de datos PostgreSQL
+  db:
+    image: postgres:16
+    container_name: postgres-db
+    restart: always
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:3212902000S}
+      - POSTGRES_DB=auth_db
+    volumes:
+      - db-data:/var/lib/postgresql/data
+      - ./init-db:/docker-entrypoint-initdb.d
+    networks:
+      - app-network
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "postgres"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  # 🧭 pgAdmin 4: interfaz web para PostgreSQL
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin
+    restart: always
+    ports:
+      - "5050:80"
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=admin@local.com
+      - PGADMIN_DEFAULT_PASSWORD=${PGADMIN_PASSWORD:-admin}
+    depends_on:
+      - db
+    networks:
+      - app-network
+    volumes:
+      - pgadmin-data:/var/lib/pgadmin
+
+# 🌐 Red compartida
+networks:
+  app-network:
+    driver: bridge
+
+# 💾 Volúmenes persistentes
+volumes:
+  db-data:
+  pgadmin-data:
