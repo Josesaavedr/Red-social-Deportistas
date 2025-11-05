@@ -1,3 +1,4 @@
-fastapi
-requests
-uvicorn
+Django>=4.2
+psycopg2-binary
+gunicorn
+python-dotenv
