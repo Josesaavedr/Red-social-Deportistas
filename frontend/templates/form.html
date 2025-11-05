@@ -1,14 +1,14 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h2>Registrar Nueva Actividad</h2>
+    <h2>Crear un Nuevo Ítem</h2>
     <form action="{{ url_for('new_item') }}" method="POST">
-        <label for="title">Título de la Actividad:</label>
-        <input type="text" id="title" name="title" placeholder="Ej: Carrera de 10km" required>
-
-        <label for="content">Detalles (distancia, tiempo, etc.):</label>
-        <textarea id="content" name="content" placeholder="Ej: Corrí 10km en 55 minutos. ¡Me sentí genial!" rows="5" required></textarea>
-
-        <button type="submit">Registrar Actividad</button>
+        <label for="name">Nombre:</label>
+        <input type="text" id="name" name="name" required>
+        <br>
+        <label for="description">Descripción:</label>
+        <textarea id="description" name="description"></textarea>
+        <br>
+        <button type="submit">Guardar</button>
     </form>
 {% endblock %}
