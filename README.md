@@ -2,8 +2,8 @@
 
 | Código | Nombre | Correo |
 |:---|:---|:---|
-| 542378923 | jose fernady saavedra duran| jose.saavedra.9076@miremington.edu.co |
-| 542378923 | narciso yunda yunda | narciso.yunda.7718@miremington.edu.co |
+|01| Jose Fernady Saavedra Duran|jose.saavedra.9076@miremington.edu.co|
+|02| Narciso Yunda Yunda | narciso.yunda.7718@miremington.edu.co |
 
 ---
 
