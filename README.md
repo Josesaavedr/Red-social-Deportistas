@@ -163,6 +163,9 @@ docker-compose exec web python manage.py <comando>
 # Acceder a la base de datos
 docker-compose exec db psql -U deportistas_user -d deportistas_db
 
+#levantar contenedores
+docker-compose up -d
+
 # Detener contenedores
 docker-compose down
 
