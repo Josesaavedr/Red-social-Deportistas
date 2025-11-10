@@ -1,0 +1,28 @@
+site_name: Documentación - Red Social Deportistas
+site_description: 'Documentación técnica del proyecto de red social para deportistas.'
+site_author: 'Tu Nombre'
+
+theme:
+  name: material
+  language: es
+  palette:
+    # Paleta para modo claro
+    - scheme: default
+      toggle:
+        icon: material/brightness-7
+        name: Cambiar a modo oscuro
+    # Paleta para modo oscuro
+    - scheme: slate
+      toggle:
+        icon: material/brightness-4
+        name: Cambiar a modo claro
+  features:
+    - navigation.tabs
+    - navigation.top
+
+markdown_extensions:
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
