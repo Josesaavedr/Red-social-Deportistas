@@ -8,12 +8,15 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    # API URLs
     path('api/', include('usuarios.urls')),
     path('api/', include('publicaciones.urls')),
     path('api/', include('eventos.urls')),
     path('api/', include('seguimientos.urls')),
+    # Web URLs
     path('', include('usuarios.urls_web')),
     path('', include('publicaciones.urls_web')),
+    path('', include('eventos.urls_web')),
 ]
 
 if settings.DEBUG:

@@ -5,24 +5,19 @@ WORKDIR /app
 # Instalar dependencias del sistema
 RUN apt-get update && apt-get install -y \
     postgresql-client \
-    bash \
-    netcat-openbsd \
+    netcat-traditional \
     && rm -rf /var/lib/apt/lists/*
 
-# Copiar requirements
+# Copiar requirements e instalar dependencias Python
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copiar el proyecto
+# Copiar aplicación
 COPY . .
 
 # Hacer ejecutable el entrypoint
 RUN chmod +x entrypoint.sh
 
-# Exponer puerto
 EXPOSE 8000
 
-# Usar entrypoint para ejecutar migraciones antes de iniciar
-ENTRYPOINT ["./entrypoint.sh"]
-CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
-
+CMD ["./entrypoint.sh"]

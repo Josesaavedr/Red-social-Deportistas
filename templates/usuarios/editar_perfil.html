@@ -1,0 +1,198 @@
+{% extends 'base.html' %}
+
+{% block title %}Editar Perfil - Red Social Deportistas{% endblock %}
+
+{% block content %}
+<div style="max-width: 700px; margin: 0 auto;">
+    <a href="{% url 'perfil_usuario' %}" class="btn btn-secondary" style="margin-bottom: 1rem;">
+        <i class="fas fa-arrow-left"></i> Volver al Perfil
+    </a>
+    
+    <div class="card">
+        <h2><i class="fas fa-user-edit"></i> Editar Perfil</h2>
+        <p style="color: #666; margin-bottom: 2rem;">Actualiza tu información personal y deportiva</p>
+        
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            
+            <h3 style="margin-top: 0;"><i class="fas fa-user"></i> Información Personal</h3>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                <div class="form-group">
+                    <label for="first_name">Nombre</label>
+                    <input 
+                        type="text" 
+                        name="first_name" 
+                        id="first_name" 
+                        class="form-control" 
+                        value="{{ user.first_name }}"
+                    >
+                </div>
+                
+                <div class="form-group">
+                    <label for="last_name">Apellido</label>
+                    <input 
+                        type="text" 
+                        name="last_name" 
+                        id="last_name" 
+                        class="form-control" 
+                        value="{{ user.last_name }}"
+                    >
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input 
+                    type="email" 
+                    name="email" 
+                    id="email" 
+                    class="form-control" 
+                    value="{{ user.email }}"
+                    required
+                >
+            </div>
+            
+            <h3><i class="fas fa-running"></i> Información Deportiva</h3>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                <div class="form-group">
+                    <label for="deporte_principal">Deporte Principal</label>
+                    <select name="deporte_principal" id="deporte_principal" class="form-control">
+                        <option value="futbol" {% if perfil.deporte_principal == 'futbol' %}selected{% endif %}>Fútbol</option>
+                        <option value="baloncesto" {% if perfil.deporte_principal == 'baloncesto' %}selected{% endif %}>Baloncesto</option>
+                        <option value="tenis" {% if perfil.deporte_principal == 'tenis' %}selected{% endif %}>Tenis</option>
+                        <option value="natacion" {% if perfil.deporte_principal == 'natacion' %}selected{% endif %}>Natación</option>
+                        <option value="ciclismo" {% if perfil.deporte_principal == 'ciclismo' %}selected{% endif %}>Ciclismo</option>
+                        <option value="atletismo" {% if perfil.deporte_principal == 'atletismo' %}selected{% endif %}>Atletismo</option>
+                        <option value="boxeo" {% if perfil.deporte_principal == 'boxeo' %}selected{% endif %}>Boxeo</option>
+                        <option value="voleibol" {% if perfil.deporte_principal == 'voleibol' %}selected{% endif %}>Voleibol</option>
+                        <option value="otro" {% if perfil.deporte_principal == 'otro' %}selected{% endif %}>Otro</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="nivel">Nivel</label>
+                    <select name="nivel" id="nivel" class="form-control">
+                        <option value="principiante" {% if perfil.nivel == 'principiante' %}selected{% endif %}>Principiante</option>
+                        <option value="intermedio" {% if perfil.nivel == 'intermedio' %}selected{% endif %}>Intermedio</option>
+                        <option value="avanzado" {% if perfil.nivel == 'avanzado' %}selected{% endif %}>Avanzado</option>
+                        <option value="profesional" {% if perfil.nivel == 'profesional' %}selected{% endif %}>Profesional</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="biografia">Biografía</label>
+                <textarea 
+                    name="biografia" 
+                    id="biografia" 
+                    class="form-control" 
+                    rows="4" 
+                    maxlength="500"
+                    placeholder="Cuéntanos sobre ti y tu experiencia deportiva..."
+                >{{ perfil.biografia }}</textarea>
+                <small style="color: #666;">Máximo 500 caracteres</small>
+            </div>
+            
+            <div class="form-group">
+                <label for="ubicacion">Ubicación</label>
+                <input 
+                    type="text" 
+                    name="ubicacion" 
+                    id="ubicacion" 
+                    class="form-control" 
+                    value="{{ perfil.ubicacion }}"
+                    placeholder="Ciudad, País"
+                >
+            </div>
+            
+            <h3><i class="fas fa-camera"></i> Fotos</h3>
+            
+            <div class="form-group">
+                <label for="foto_perfil">Foto de Perfil</label>
+                {% if perfil.foto_perfil %}
+                <div style="margin-bottom: 0.5rem;">
+                    <img src="{{ perfil.foto_perfil.url }}" alt="Foto actual" style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover;">
+                </div>
+                {% endif %}
+                <input 
+                    type="file" 
+                    name="foto_perfil" 
+                    id="foto_perfil" 
+                    class="form-control"
+                    accept="image/*"
+                >
+            </div>
+            
+            <div class="form-group">
+                <label for="foto_portada">Foto de Portada</label>
+                {% if perfil.foto_portada %}
+                <div style="margin-bottom: 0.5rem;">
+                    <img src="{{ perfil.foto_portada.url }}" alt="Portada actual" style="width: 100%; max-height: 150px; border-radius: 10px; object-fit: cover;">
+                </div>
+                {% endif %}
+                <input
+                    type="file"
+                    name="foto_portada"
+                    id="foto_portada"
+                    class="form-control"
+                    accept="image/*"
+                >
+            </div>
+
+            <h3><i class="fas fa-share-alt"></i> Redes Sociales</h3>
+
+            <div class="form-group">
+                <label for="sitio_web">Sitio Web</label>
+                <input
+                    type="url"
+                    name="sitio_web"
+                    id="sitio_web"
+                    class="form-control"
+                    value="{{ perfil.sitio_web }}"
+                    placeholder="https://tusitio.com"
+                >
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                <div class="form-group">
+                    <label for="instagram">Instagram</label>
+                    <input
+                        type="text"
+                        name="instagram"
+                        id="instagram"
+                        class="form-control"
+                        value="{{ perfil.instagram }}"
+                        placeholder="usuario"
+                    >
+                    <small style="color: #666;">Sin @</small>
+                </div>
+
+                <div class="form-group">
+                    <label for="twitter">Twitter</label>
+                    <input
+                        type="text"
+                        name="twitter"
+                        id="twitter"
+                        class="form-control"
+                        value="{{ perfil.twitter }}"
+                        placeholder="usuario"
+                    >
+                    <small style="color: #666;">Sin @</small>
+                </div>
+            </div>
+
+            <div style="display: flex; gap: 1rem; margin-top: 2rem;">
+                <button type="submit" class="btn">
+                    <i class="fas fa-save"></i> Guardar Cambios
+                </button>
+                <a href="{% url 'perfil_usuario' %}" class="btn btn-secondary">
+                    <i class="fas fa-times"></i> Cancelar
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
