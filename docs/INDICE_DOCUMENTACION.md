@@ -292,7 +292,7 @@ Estos documentos deben actualizarse cuando:
 → Lee **[Guía de Inicio (README)](proyecto/README.md)** + **RESUMEN_CAMBIOS.md**
 
 **Si tienes 30 minutos:**
-→ Lee **README.md** + **GUIA_CARPETAS_Y_ARCHIVOS.md**
+→ Lee **[Guía de Inicio (README)](proyecto/README.md)** + **GUIA_CARPETAS_Y_ARCHIVOS.md**
 
 **Si tienes 1 hora:**
 → Lee **README.md** + **GUIA_CARPETAS_Y_ARCHIVOS.md** + **MAPA_SERVICIOS.md**

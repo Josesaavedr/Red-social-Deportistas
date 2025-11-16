@@ -3,14 +3,13 @@
 ## 📋 Índice
 1. [Visión General](#visión-general)
 2. [Arquitectura del Sistema](#arquitectura-del-sistema)
-3. [Estructura de Carpetas](#estructura-de-carpetas)
-4. [Componentes Principales](#estructura-de-carpetas)
-5. [Flujo de Datos](#flujo-de-datos)
-6. [Tecnologías Utilizadas](#tecnologías-utilizadas)
+3. [Estructura de Carpetas y Componentes](#estructura-de-carpetas)
+4. [Flujo de Datos](#flujo-de-datos)
+5. [Tecnologías Utilizadas](#tecnologías-utilizadas)
 
 ---
 
-## 🎯 Visión General
+## Visión General
 
 Este proyecto es una **Red Social para Deportistas** construida con una arquitectura híbrida que combina:
 - **Django** como framework principal (monolito modular)
@@ -29,7 +28,7 @@ Plataforma social donde deportistas pueden:
 
 ---
 
-## 🏛️ Arquitectura del Sistema
+## Arquitectura del Sistema
 
 ```
 ┌─────────────────────────────────────────────────────────────┐

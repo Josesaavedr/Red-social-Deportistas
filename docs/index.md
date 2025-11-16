@@ -34,16 +34,16 @@ Se crearon **5 documentos** para explicar todo el proyecto:
 
 ### Si es tu primera vez aquí:
 
-1. **Lee primero:** [README.md](README.md) (5 minutos)
+1. **Lee primero:** [Guía de Inicio (README)](proyecto/README.md) (5 minutos)
    - Qué es el proyecto
    - Cómo instalarlo
    - Comandos básicos
 
-2. **Luego lee:** [GUIA_CARPETAS_Y_ARCHIVOS.md](GUIA_CARPETAS_Y_ARCHIVOS.md) (15 minutos)
+2. **Luego lee:** [Guía de Archivos](GUIA_CARPETAS_Y_ARCHIVOS.md) (15 minutos)
    - Qué hace cada carpeta
    - Dónde encontrar cada cosa
 
-3. **Para profundizar:** [ARQUITECTURA_DETALLADA.md](ARQUITECTURA_DETALLADA.md) (30 minutos)
+3. **Para profundizar:** [Arquitectura Detallada](ARQUITECTURA_DETALLADA.md) (30 minutos)
    - Cómo funciona todo el sistema
    - Modelos de datos
    - Flujos de trabajo
@@ -82,7 +82,7 @@ Se crearon **5 documentos** para explicar todo el proyecto:
 ## 🎯 ¿Qué Necesitas?
 
 ### "Quiero instalar el proyecto"
-→ Lee **[README.md](README.md)** - Sección "Instalación y Ejecución"
+→ Lee **[Guía de Inicio (README)](proyecto/README.md)** - Sección "Instalación y Ejecución"
 
 ### "Quiero entender qué hace cada carpeta"
 → Lee **[GUIA_CARPETAS_Y_ARCHIVOS.md](GUIA_CARPETAS_Y_ARCHIVOS.md)**
@@ -208,7 +208,7 @@ docker-compose down
 
 ### Lectura Completa (2 horas)
 
-1. **[README.md](README.md)** (5 min)
+1. **[Guía de Inicio (README)](proyecto/README.md)** (5 min)
    - Instalación y configuración
 
 2. **[RESUMEN_CAMBIOS.md](RESUMEN_CAMBIOS.md)** (10 min)
@@ -257,7 +257,7 @@ docker-compose down
 
 Si tienes dudas sobre:
 
-- **Instalación** → README.md
+- **Instalación** → [Guía de Inicio (README)](proyecto/README.md)
 - **Estructura** → GUIA_CARPETAS_Y_ARCHIVOS.md
 - **Arquitectura** → ARQUITECTURA_DETALLADA.md
 - **APIs** → MAPA_SERVICIOS.md

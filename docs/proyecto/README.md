@@ -105,6 +105,10 @@ docker-compose exec web python manage.py createsuperuser
 - **Admin Panel**: http://localhost:8000/admin
 - **API**: http://localhost:8000/api/
 
+## Acceso a la Documentacion
+
+- **Documentacion**: http://localhost:8001
+
 ## 📚 Documentación de Arquitectura
 
 Este proyecto cuenta con documentación detallada de su arquitectura:
