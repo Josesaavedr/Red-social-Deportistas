@@ -12,21 +12,43 @@ Red social diseñada específicamente para deportistas, construida con Django, P
 
 ## 🎯 Características
 
+### Funcionalidades Principales
 - **Gestión de Usuarios**: Sistema de registro y autenticación personalizado
 - **Perfiles Deportivos**: Perfiles con información deportiva (deporte principal, nivel, biografía, etc.)
 - **Publicaciones**: Sistema de publicaciones con imágenes, likes y comentarios
+- **Sesiones de Entrenamiento**: Tracking de entrenamientos con métricas (distancia, calorías, tiempo)
 - **Eventos Deportivos**: Creación y participación en eventos deportivos
 - **Seguimientos**: Sistema para seguir a otros deportistas
 - **API REST**: API completa con Django REST Framework
+
+### Arquitectura de Microservicios
+- **API Gateway**: Enrutador centralizado para microservicios
+- **Authentication Service**: Autenticación JWT (en desarrollo)
+- **Data Management Service**: Gestión multi-base de datos (SQL, MongoDB, Redis)
+- **Notifications Service**: Sistema de notificaciones (plantilla)
+- **Analytics Service**: Análisis y métricas deportivas (plantilla)
+
+### Infraestructura
 - **Docker**: Contenedorización completa con Docker y Docker Compose
+- **PostgreSQL**: Base de datos principal
+- **Arquitectura Híbrida**: Monolito modular + Microservicios
 
 ## 🛠️ Tecnologías
 
-- **Backend**: Django 4.2.7
-- **Base de Datos**: PostgreSQL 15
-- **API**: Django REST Framework
-- **Contenedores**: Docker & Docker Compose
-- **Python**: 3.11
+### Backend Principal
+- **Django 4.2.7**: Framework web principal
+- **Django REST Framework**: API RESTful
+- **PostgreSQL 15**: Base de datos relacional
+- **Python 3.11**: Lenguaje de programación
+
+### Microservicios
+- **FastAPI**: Framework para microservicios
+- **MongoDB**: Base de datos NoSQL (data-management)
+- **Redis**: Caché en memoria (data-management)
+
+### DevOps
+- **Docker**: Containerización
+- **Docker Compose**: Orquestación de contenedores
 
 ## 📋 Requisitos Previos
 
@@ -83,7 +105,15 @@ docker-compose exec web python manage.py createsuperuser
 - **Admin Panel**: http://localhost:8000/admin
 - **API**: http://localhost:8000/api/
 
-## 📚 Estructura del Proyecto
+## 📚 Documentación de Arquitectura
+
+Este proyecto cuenta con documentación detallada de su arquitectura:
+
+- **[📖 ARQUITECTURA_DETALLADA.md](ARQUITECTURA_DETALLADA.md)** - Explicación completa de la arquitectura, componentes y flujos de datos
+- **[📂 GUIA_CARPETAS_Y_ARCHIVOS.md](GUIA_CARPETAS_Y_ARCHIVOS.md)** - Guía descriptiva de cada carpeta y archivo del proyecto
+- **[🗺️ MAPA_SERVICIOS.md](MAPA_SERVICIOS.md)** - Diagramas visuales de servicios, endpoints y modelos de datos
+
+## 📁 Estructura del Proyecto
 
 ```
 Red-social-Deportistas/
@@ -95,12 +125,23 @@ Red-social-Deportistas/
 ├── publicaciones/            # App de publicaciones
 ├── eventos/                  # App de eventos deportivos
 ├── seguimientos/             # App de seguimientos
-├── templates/                # Templates HTML
-├── manage.py                # Script de gestión de Django
-├── requirements.txt         # Dependencias de Python
-├── Dockerfile              # Configuración de Docker
-└── docker-compose.yml      # Configuración de Docker Compose
+├── services/                 # Microservicios FastAPI
+│   ├── authentication/       # Servicio de autenticación JWT
+│   ├── data-management/      # Gestión multi-DB (SQL, Mongo, Redis)
+│   ├── notifications/        # Servicio de notificaciones
+│   └── analytics/            # Servicio de análisis y métricas
+├── api-gateway/             # Gateway de microservicios
+├── frontend/                # Frontend Flask (opcional)
+├── templates/               # Templates HTML Django
+├── staticfiles/             # Archivos estáticos
+├── media/                   # Archivos subidos por usuarios
+├── manage.py               # Script de gestión de Django
+├── requirements.txt        # Dependencias de Python
+├── Dockerfile             # Configuración de Docker
+└── docker-compose.yml     # Configuración de Docker Compose
 ```
+
+> 💡 **Nota**: Los servicios `service1`, `service2` y `service3` han sido renombrados a `data-management`, `notifications` y `analytics` respectivamente para mayor claridad.
 
 ## 🔌 API Endpoints
 
