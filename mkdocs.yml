@@ -2,6 +2,8 @@ site_name: Documentación - Red Social Deportistas
 site_description: 'Documentación técnica del proyecto de red social para deportistas.'
 site_author: 'jose saavedra y narciso yudai'
 
+docs_dir: docs
+
 theme:
   name: material
   language: es
@@ -18,7 +20,17 @@ theme:
         name: Cambiar a modo claro
   features:
     - navigation.tabs
+    - navigation.sections
     - navigation.top
+
+nav:
+  - '👋 Bienvenida': 'index.md'
+  - '🚀 Guía de Inicio (README)': 'proyecto/README.md'
+  - '📚 Índice General': 'INDICE_DOCUMENTACION.md'
+  - '🏗️ Arquitectura': 'ARQUITECTURA_DETALLADA.md'
+  - '🗺️ Mapa de Servicios': 'MAPA_SERVICIOS.md'
+  - '📂 Guía de Archivos': 'GUIA_CARPETAS_Y_ARCHIVOS.md'
+  - '📋 Resumen de Cambios': 'RESUMEN_CAMBIOS.md'
 
 markdown_extensions:
   - pymdownx.superfences:
