@@ -1,6 +1,6 @@
 services:
   db:
-    image: postgres:15-alpine
+    image: postgres:15
     container_name: deportistas_db
     environment:
       - POSTGRES_USER=deportistas_user
@@ -11,7 +11,7 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U deportistas_user"]
+      test: ["CMD-SHELL", "pg_isready -U deportistas_user -d deportistas_db"]
       interval: 10s
       timeout: 5s
       retries: 5
