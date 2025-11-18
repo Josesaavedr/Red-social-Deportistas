@@ -2,8 +2,8 @@ from django.urls import path
 from . import views_web
 
 urlpatterns = [
-    path('', views_web.home, name='home'),
-    path('publicaciones/', views_web.lista_publicaciones, name='lista_publicaciones'),
+    path('', views_web.lista_publicaciones, name='home'),  # La página de inicio es la lista de publicaciones
+    path('publicaciones/', views_web.lista_publicaciones, name='lista_publicaciones'), # Se mantiene por si se usa en otro lugar
     path('publicaciones/<int:pk>/', views_web.detalle_publicacion, name='detalle_publicacion'),
     path('publicaciones/crear/', views_web.crear_publicacion, name='crear_publicacion'),
     path('publicaciones/<int:pk>/like/', views_web.toggle_like, name='toggle_like'),
@@ -13,4 +13,3 @@ urlpatterns = [
     path('entrenamientos/controlar/', views_web.controlar_entrenamiento, name='controlar_entrenamiento'),
     path('entrenamientos/tiempo/', views_web.obtener_tiempo_entrenamiento, name='tiempo_entrenamiento'),
 ]
-
