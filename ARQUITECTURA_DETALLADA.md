@@ -1,12 +1,12 @@
 # 🏗️ Arquitectura Detallada - Red Social para Deportistas
 
 ## 📋 Índice
-1. [Visión General](#vision-general)
+1. [Visión General](#visión-general)
 2. [Arquitectura del Sistema](#arquitectura-del-sistema)
 3. [Estructura de Carpetas](#estructura-de-carpetas)
 4. [Componentes Principales](#componentes-principales)
 5. [Flujo de Datos](#flujo-de-datos)
-6. [Tecnologías Utilizadas](#tecnologias-utilizadas)
+6. [Tecnologías Utilizadas](#tecnologías-utilizadas)
 
 ---
 
@@ -29,7 +29,7 @@ Plataforma social donde deportistas pueden:
 
 ---
 
-## Arquitectura del Sistema
+## 🏛️ Arquitectura del Sistema
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
@@ -603,3 +603,4 @@ Usuario (N) ←→ (M) Usuario (Seguimiento)
 ---
 
 **Documento creado para explicar la arquitectura completa del proyecto Red Social para Deportistas**
+

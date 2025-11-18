@@ -2,7 +2,7 @@
 
 | Código | Nombre | Correo |
 |:---|:---|:---|
-|01| Jose Fernandy Saavedra Duran|jose.saavedra.9076@miremington.edu.co|
+|01| Jose Fernady Saavedra Duran|jose.saavedra.9076@miremington.edu.co|
 |02| Narciso Yunda Yunda | narciso.yunda.7718@miremington.edu.co |
 
 ---
@@ -108,9 +108,10 @@ docker-compose exec web python manage.py createsuperuser
 ## 📚 Documentación de Arquitectura
 
 Este proyecto cuenta con documentación detallada de su arquitectura:
-- **[📖 ARQUITECTURA_DETALLADA.md](ARQUITECTURA_DETALLADA.md)** - Explicación completa de la arquitectura, componentes y flujos de datos.
-- **[📂 GUIA_CARPETAS_Y_ARCHIVOS.md](GUIA_CARPETAS_Y_ARCHIVOS.md)** - Guía descriptiva de cada carpeta y archivo del proyecto.
-- **[🗺️ MAPA_SERVICIOS.md](MAPA_SERVICIOS.md)** - Diagramas visuales de servicios, endpoints y modelos de datos.
+
+- **[📖 ARQUITECTURA_DETALLADA.md](ARQUITECTURA_DETALLADA.md)** - Explicación completa de la arquitectura, componentes y flujos de datos
+- **[📂 GUIA_CARPETAS_Y_ARCHIVOS.md](GUIA_CARPETAS_Y_ARCHIVOS.md)** - Guía descriptiva de cada carpeta y archivo del proyecto
+- **[🗺️ MAPA_SERVICIOS.md](MAPA_SERVICIOS.md)** - Diagramas visuales de servicios, endpoints y modelos de datos
 
 ## 📁 Estructura del Proyecto
 

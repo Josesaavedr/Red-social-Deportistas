@@ -9,6 +9,11 @@ from .models import Publicacion, Like, Comentario, SesionEntrenamiento
 import json
 
 
+def home(request):
+    """Vista principal - página de bienvenida"""
+    return render(request, 'publicaciones/feed.html')
+
+
 def lista_publicaciones(request):
     """Vista para mostrar lista de publicaciones"""
     publicaciones = Publicacion.objects.select_related('autor').prefetch_related('likes', 'comentarios').order_by('-fecha_creacion')
@@ -355,3 +360,10 @@ def obtener_tiempo_entrenamiento(request):
         })
     except SesionEntrenamiento.DoesNotExist:
         return JsonResponse({'success': False, 'error': 'No hay sesión activa'})
+
+
+
+
+
+
+
