@@ -1,0 +1,1980 @@
+
+<!doctype html>
+<html lang="es" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Documentación técnica del proyecto de red social para deportistas.">
+      
+      
+        <meta name="author" content="jose saavedra y narciso yudai">
+      
+      
+      
+        <link rel="prev" href="../ARQUITECTURA_DETALLADA/">
+      
+      
+        <link rel="next" href="../GUIA_CARPETAS_Y_ARCHIVOS/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.0">
+    
+    
+      
+        <title>🗺️ Mapa de Servicios - Documentación - Red Social Deportistas</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.618322db.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/_mkdocstrings.css">
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#mapa-de-servicios-red-social-deportistas" class="md-skip">
+          Saltar a contenido
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Cabecera">
+    <a href=".." title="Documentación - Red Social Deportistas" class="md-header__button md-logo" aria-label="Documentación - Red Social Deportistas" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Documentación - Red Social Deportistas
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              🗺️ Mapa de Servicios
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Cambiar a modo oscuro"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Cambiar a modo oscuro" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Cambiar a modo claro"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Cambiar a modo claro" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Búsqueda" placeholder="Búsqueda" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Buscar">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Limpiar" aria-label="Limpiar" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Inicializando búsqueda
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/saavedra-jose/Red-social-Deportistas" title="Ir al repositorio" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Pestañas" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href=".." class="md-tabs__link">
+        
+  
+  
+    
+  
+  👋 Bienvenida
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../proyecto/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  🚀 Guía de Inicio (README)
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../INDICE_DOCUMENTACION/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  📚 Índice General
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../ARQUITECTURA_DETALLADA/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  🏗️ Arquitectura
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    <li class="md-tabs__item md-tabs__item--active">
+      <a href="./" class="md-tabs__link">
+        
+  
+  
+    
+  
+  🗺️ Mapa de Servicios
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../GUIA_CARPETAS_Y_ARCHIVOS/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  📂 Guía de Archivos
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../RESUMEN_CAMBIOS/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  📋 Resumen de Cambios
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navegación" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="Documentación - Red Social Deportistas" class="md-nav__button md-logo" aria-label="Documentación - Red Social Deportistas" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Documentación - Red Social Deportistas
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/saavedra-jose/Red-social-Deportistas" title="Ir al repositorio" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    👋 Bienvenida
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../proyecto/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    🚀 Guía de Inicio (README)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../INDICE_DOCUMENTACION/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    📚 Índice General
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ARQUITECTURA_DETALLADA/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    🏗️ Arquitectura
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    🗺️ Mapa de Servicios
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    🗺️ Mapa de Servicios
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Tabla de contenidos">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Tabla de contenidos
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#diagrama-de-arquitectura-completa" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📊 Diagrama de Arquitectura Completa
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#flujos-de-datos-principales" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🎯 Flujos de Datos Principales
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🎯 Flujos de Datos Principales">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-flujo-de-autenticacion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Flujo de Autenticación
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-flujo-de-publicacion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Flujo de Publicación
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-flujo-de-entrenamiento" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Flujo de Entrenamiento
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-flujo-de-evento" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Flujo de Evento
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#endpoints-principales" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🔌 Endpoints Principales
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🔌 Endpoints Principales">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#django-rest-api-puerto-8000" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Django REST API (Puerto 8000)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Django REST API (Puerto 8000)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#usuarios" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Usuarios
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#publicaciones" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Publicaciones
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#eventos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Eventos
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#seguimientos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Seguimientos
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#api-gateway-puerto-8080" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        API Gateway (Puerto 8080)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#microservicios-fastapi" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Microservicios (FastAPI)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Microservicios (FastAPI)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#authentication-service-8001" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Authentication Service (:8001)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#data-management-service-8002" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Data Management Service (:8002)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#notifications-service-8003" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Notifications Service (:8003)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#analytics-service-8004" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Analytics Service (:8004)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#modelos-de-datos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🗄️ Modelos de Datos
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🗄️ Modelos de Datos">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#usuario-y-perfil" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Usuario y Perfil
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#publicaciones_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Publicaciones
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#eventos_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Eventos
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#seguimientos_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Seguimientos
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#seguridad-y-autenticacion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🔐 Seguridad y Autenticación
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🔐 Seguridad y Autenticación">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#actual-django" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Actual (Django)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#futuro-microservicios" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Futuro (Microservicios)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#dependencias-principales" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📦 Dependencias Principales
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="📦 Dependencias Principales">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#django" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Django
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#fastapi-microservicios" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        FastAPI (Microservicios)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#data-management" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Data Management
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#despliegue" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🚀 Despliegue
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🚀 Despliegue">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#desarrollo-docker-compose" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Desarrollo (Docker Compose)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#produccion-sugerido" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Producción (Sugerido)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#monitoreo-y-logs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📊 Monitoreo y Logs
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="📊 Monitoreo y Logs">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#health-checks" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Health Checks
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#logs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Logs
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../GUIA_CARPETAS_Y_ARCHIVOS/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    📂 Guía de Archivos
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../RESUMEN_CAMBIOS/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    📋 Resumen de Cambios
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Tabla de contenidos">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Tabla de contenidos
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#diagrama-de-arquitectura-completa" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📊 Diagrama de Arquitectura Completa
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#flujos-de-datos-principales" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🎯 Flujos de Datos Principales
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🎯 Flujos de Datos Principales">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-flujo-de-autenticacion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Flujo de Autenticación
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-flujo-de-publicacion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Flujo de Publicación
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-flujo-de-entrenamiento" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Flujo de Entrenamiento
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-flujo-de-evento" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Flujo de Evento
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#endpoints-principales" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🔌 Endpoints Principales
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🔌 Endpoints Principales">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#django-rest-api-puerto-8000" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Django REST API (Puerto 8000)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Django REST API (Puerto 8000)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#usuarios" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Usuarios
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#publicaciones" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Publicaciones
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#eventos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Eventos
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#seguimientos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Seguimientos
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#api-gateway-puerto-8080" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        API Gateway (Puerto 8080)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#microservicios-fastapi" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Microservicios (FastAPI)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Microservicios (FastAPI)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#authentication-service-8001" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Authentication Service (:8001)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#data-management-service-8002" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Data Management Service (:8002)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#notifications-service-8003" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Notifications Service (:8003)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#analytics-service-8004" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Analytics Service (:8004)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#modelos-de-datos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🗄️ Modelos de Datos
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🗄️ Modelos de Datos">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#usuario-y-perfil" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Usuario y Perfil
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#publicaciones_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Publicaciones
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#eventos_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Eventos
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#seguimientos_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Seguimientos
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#seguridad-y-autenticacion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🔐 Seguridad y Autenticación
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🔐 Seguridad y Autenticación">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#actual-django" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Actual (Django)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#futuro-microservicios" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Futuro (Microservicios)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#dependencias-principales" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📦 Dependencias Principales
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="📦 Dependencias Principales">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#django" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Django
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#fastapi-microservicios" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        FastAPI (Microservicios)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#data-management" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Data Management
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#despliegue" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🚀 Despliegue
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🚀 Despliegue">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#desarrollo-docker-compose" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Desarrollo (Docker Compose)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#produccion-sugerido" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Producción (Sugerido)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#monitoreo-y-logs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📊 Monitoreo y Logs
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="📊 Monitoreo y Logs">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#health-checks" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Health Checks
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#logs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Logs
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="mapa-de-servicios-red-social-deportistas">🗺️ Mapa de Servicios - Red Social Deportistas</h1>
+<h2 id="diagrama-de-arquitectura-completa">📊 Diagrama de Arquitectura Completa</h2>
+<div class="highlight"><pre><span></span><code>┌─────────────────────────────────────────────────────────────────────┐
+│                         CAPA DE CLIENTE                             │
+│                    (Navegador Web / Mobile App)                     │
+└────────────────────────────┬────────────────────────────────────────┘
+                             │
+                             │ HTTP/HTTPS
+                             │
+        ┌────────────────────┴────────────────────┐
+        │                                         │
+        ▼                                         ▼
+┌───────────────────┐                  ┌──────────────────────┐
+│   DJANGO WEB      │                  │   API GATEWAY        │
+│   Puerto 8000     │                  │   FastAPI :8080      │
+│                   │                  │                      │
+│ ┌───────────────┐ │                  │  Enrutador de        │
+│ │   usuarios/   │ │                  │  Microservicios      │
+│ │ publicaciones/│ │                  │                      │
+│ │   eventos/    │ │                  └──────────┬───────────┘
+│ │ seguimientos/ │ │                             │
+│ └───────────────┘ │                             │
+│                   │                             │
+│  Django REST      │              ┌──────────────┼──────────────┐
+│  Framework        │              │              │              │
+└─────────┬─────────┘              ▼              ▼              ▼
+          │                 ┌─────────────┐ ┌──────────┐ ┌──────────┐
+          │                 │    Auth     │ │   Data   │ │  Notif.  │
+          │                 │  Service    │ │   Mgmt   │ │  Service │
+          │                 │   :8001     │ │  :8002   │ │  :8003   │
+          │                 └─────────────┘ └────┬─────┘ └──────────┘
+          │                                      │
+          │                                      │
+          ▼                                      ▼
+┌─────────────────────┐              ┌──────────────────────┐
+│   PostgreSQL DB     │              │  MongoDB / Redis     │
+│     Puerto 5432     │              │  Bases alternativas  │
+│                     │              │                      │
+│  - usuarios         │              │  - Logs              │
+│  - publicaciones    │              │  - Caché             │
+│  - eventos          │              │  - Métricas          │
+│  - seguimientos     │              │                      │
+└─────────────────────┘              └──────────────────────┘
+</code></pre></div>
+<hr />
+<h2 id="flujos-de-datos-principales">🎯 Flujos de Datos Principales</h2>
+<h3 id="1-flujo-de-autenticacion">1. Flujo de Autenticación</h3>
+<div class="highlight"><pre><span></span><code>Usuario ingresa credenciales
+         │
+         ▼
+    Django Web (:8000)
+         │
+         ├─→ Valida contra Usuario model
+         │
+         ├─→ Crea sesión Django
+         │
+         └─→ [Futuro] API Gateway → Auth Service (JWT)
+         │
+         ▼
+    Token/Sesión devuelto
+</code></pre></div>
+<h3 id="2-flujo-de-publicacion">2. Flujo de Publicación</h3>
+<div class="highlight"><pre><span></span><code>Usuario crea post
+         │
+         ▼
+    Django API (:8000/api/)
+         │
+         ├─→ Serializer valida datos
+         │
+         ├─→ Model guarda en PostgreSQL
+         │
+         ├─→ [Opcional] Notif Service → Avisa a seguidores
+         │
+         └─→ [Opcional] Analytics Service → Registra métrica
+         │
+         ▼
+    Respuesta JSON al cliente
+</code></pre></div>
+<h3 id="3-flujo-de-entrenamiento">3. Flujo de Entrenamiento</h3>
+<div class="highlight"><pre><span></span><code>Usuario inicia sesión
+         │
+         ▼
+    SesionEntrenamiento (estado: activo)
+         │
+         ├─→ Usuario registra métricas en tiempo real
+         │
+         ├─→ Data Management Service → Caché Redis
+         │
+         └─→ Usuario finaliza sesión
+         │
+         ▼
+    Publicacion auto-generada
+         │
+         ▼
+    Analytics Service → Procesa estadísticas
+</code></pre></div>
+<h3 id="4-flujo-de-evento">4. Flujo de Evento</h3>
+<div class="highlight"><pre><span></span><code>Usuario crea evento
+         │
+         ▼
+    Django API (:8000/api/eventos/)
+         │
+         ├─→ EventoDeportivo guardado
+         │
+         └─→ Notif Service → Avisa a seguidores
+         │
+         ▼
+    Otros usuarios se inscriben
+         │
+         ▼
+    ParticipanteEvento creado
+         │
+         └─→ Notif Service → Confirma inscripción
+</code></pre></div>
+<hr />
+<h2 id="endpoints-principales">🔌 Endpoints Principales</h2>
+<h3 id="django-rest-api-puerto-8000">Django REST API (Puerto 8000)</h3>
+<h4 id="usuarios">Usuarios</h4>
+<div class="highlight"><pre><span></span><code>GET    /api/usuarios/                    # Listar usuarios
+POST   /api/usuarios/                    # Crear usuario
+GET    /api/usuarios/{id}/               # Detalle usuario
+PUT    /api/usuarios/{id}/               # Actualizar usuario
+DELETE /api/usuarios/{id}/               # Eliminar usuario
+GET    /api/usuarios/{id}/perfil/        # Perfil deportista
+</code></pre></div>
+<h4 id="publicaciones">Publicaciones</h4>
+<div class="highlight"><pre><span></span><code>GET    /api/publicaciones/               # Feed de publicaciones
+POST   /api/publicaciones/               # Crear publicación
+GET    /api/publicaciones/{id}/          # Detalle publicación
+POST   /api/publicaciones/{id}/like/     # Dar like
+POST   /api/publicaciones/{id}/comentar/ # Comentar
+GET    /api/entrenamientos/              # Sesiones de entrenamiento
+POST   /api/entrenamientos/              # Iniciar entrenamiento
+PUT    /api/entrenamientos/{id}/pausar/  # Pausar entrenamiento
+PUT    /api/entrenamientos/{id}/finalizar/ # Finalizar entrenamiento
+</code></pre></div>
+<h4 id="eventos">Eventos</h4>
+<div class="highlight"><pre><span></span><code>GET    /api/eventos/                     # Listar eventos
+POST   /api/eventos/                     # Crear evento
+GET    /api/eventos/{id}/                # Detalle evento
+POST   /api/eventos/{id}/inscribir/      # Inscribirse
+DELETE /api/eventos/{id}/desinscribir/   # Desinscribirse
+GET    /api/eventos/{id}/participantes/  # Listar participantes
+</code></pre></div>
+<h4 id="seguimientos">Seguimientos</h4>
+<div class="highlight"><pre><span></span><code>GET    /api/seguimientos/                # Mis seguimientos
+POST   /api/seguimientos/                # Seguir usuario
+DELETE /api/seguimientos/{id}/           # Dejar de seguir
+GET    /api/usuarios/{id}/seguidores/    # Seguidores de usuario
+GET    /api/usuarios/{id}/siguiendo/     # A quién sigue usuario
+</code></pre></div>
+<hr />
+<h3 id="api-gateway-puerto-8080">API Gateway (Puerto 8080)</h3>
+<div class="highlight"><pre><span></span><code>GET/POST  /api/v1/auth/{path}            # → Auth Service :8001
+GET/POST  /api/v1/data/{path}            # → Data Management :8002
+GET/POST  /api/v1/notifications/{path}   # → Notifications :8003
+GET/POST  /api/v1/analytics/{path}       # → Analytics :8004
+GET       /health                        # Health check del gateway
+</code></pre></div>
+<hr />
+<h3 id="microservicios-fastapi">Microservicios (FastAPI)</h3>
+<h4 id="authentication-service-8001">Authentication Service (:8001)</h4>
+<div class="highlight"><pre><span></span><code>POST   /login                            # Login con JWT
+POST   /register                         # Registro
+POST   /refresh                          # Refresh token
+GET    /verify                           # Verificar token
+GET    /health                           # Health check
+</code></pre></div>
+<h4 id="data-management-service-8002">Data Management Service (:8002)</h4>
+<div class="highlight"><pre><span></span><code>GET    /cache/{key}                      # Obtener de Redis
+POST   /cache/{key}                      # Guardar en Redis
+GET    /logs                             # Obtener logs (MongoDB)
+POST   /logs                             # Guardar log (MongoDB)
+GET    /health                           # Health check
+</code></pre></div>
+<h4 id="notifications-service-8003">Notifications Service (:8003)</h4>
+<div class="highlight"><pre><span></span><code>POST   /send/email                       # Enviar email
+POST   /send/push                        # Enviar push notification
+POST   /send/realtime                    # Notificación en tiempo real
+GET    /notifications/{user_id}          # Obtener notificaciones
+GET    /health                           # Health check
+</code></pre></div>
+<h4 id="analytics-service-8004">Analytics Service (:8004)</h4>
+<div class="highlight"><pre><span></span><code>GET    /stats/user/{id}                  # Estadísticas de usuario
+GET    /stats/training/{id}              # Estadísticas de entrenamiento
+GET    /stats/engagement                 # Métricas de engagement
+POST   /track/event                      # Registrar evento
+GET    /health                           # Health check
+</code></pre></div>
+<hr />
+<h2 id="modelos-de-datos">🗄️ Modelos de Datos</h2>
+<h3 id="usuario-y-perfil">Usuario y Perfil</h3>
+<div class="highlight"><pre><span></span><code><span class="n">Usuario</span>
+<span class="err">├──</span> <span class="nb">id</span> <span class="p">(</span><span class="n">PK</span><span class="p">)</span>
+<span class="err">├──</span> <span class="n">username</span> <span class="p">(</span><span class="n">unique</span><span class="p">)</span>
+<span class="err">├──</span> <span class="n">email</span> <span class="p">(</span><span class="n">unique</span><span class="p">)</span>
+<span class="err">├──</span> <span class="n">password</span> <span class="p">(</span><span class="n">hashed</span><span class="p">)</span>
+<span class="err">├──</span> <span class="n">telefono</span>
+<span class="err">├──</span> <span class="n">fecha_nacimiento</span>
+<span class="err">├──</span> <span class="n">es_verificado</span>
+<span class="err">└──</span> <span class="n">PerfilDeportista</span> <span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="mi">1</span><span class="p">)</span>
+    <span class="err">├──</span> <span class="n">deporte_principal</span>
+    <span class="err">├──</span> <span class="n">nivel</span>
+    <span class="err">├──</span> <span class="n">biografia</span>
+    <span class="err">├──</span> <span class="n">foto_perfil</span>
+    <span class="err">└──</span> <span class="n">redes_sociales</span>
+</code></pre></div>
+<h3 id="publicaciones_1">Publicaciones</h3>
+<div class="highlight"><pre><span></span><code><span class="n">Publicacion</span>
+<span class="err">├──</span> <span class="nb">id</span> <span class="p">(</span><span class="n">PK</span><span class="p">)</span>
+<span class="err">├──</span> <span class="n">autor</span> <span class="p">(</span><span class="n">FK</span> <span class="err">→</span> <span class="n">Usuario</span><span class="p">)</span>
+<span class="err">├──</span> <span class="n">contenido</span>
+<span class="err">├──</span> <span class="n">imagen</span>
+<span class="err">├──</span> <span class="n">tipo</span> <span class="p">(</span><span class="n">normal</span><span class="o">/</span><span class="n">entrenamiento</span><span class="p">)</span>
+<span class="err">├──</span> <span class="n">likes_count</span>
+<span class="err">├──</span> <span class="n">comentarios_count</span>
+<span class="err">├──</span> <span class="n">Like</span> <span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">N</span><span class="p">)</span>
+<span class="err">│</span>   <span class="err">├──</span> <span class="n">usuario</span> <span class="p">(</span><span class="n">FK</span><span class="p">)</span>
+<span class="err">│</span>   <span class="err">└──</span> <span class="n">fecha</span>
+<span class="err">├──</span> <span class="n">Comentario</span> <span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">N</span><span class="p">)</span>
+<span class="err">│</span>   <span class="err">├──</span> <span class="n">usuario</span> <span class="p">(</span><span class="n">FK</span><span class="p">)</span>
+<span class="err">│</span>   <span class="err">├──</span> <span class="n">contenido</span>
+<span class="err">│</span>   <span class="err">└──</span> <span class="n">fecha</span>
+<span class="err">└──</span> <span class="n">SesionEntrenamiento</span> <span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="mi">1</span><span class="p">)</span>
+    <span class="err">├──</span> <span class="n">deporte</span>
+    <span class="err">├──</span> <span class="n">estado</span>
+    <span class="err">├──</span> <span class="n">inicio</span><span class="o">/</span><span class="n">fin</span>
+    <span class="err">├──</span> <span class="n">distancia</span>
+    <span class="err">└──</span> <span class="n">calorias</span>
+</code></pre></div>
+<h3 id="eventos_1">Eventos</h3>
+<div class="highlight"><pre><span></span><code><span class="n">EventoDeportivo</span>
+<span class="err">├──</span> <span class="nb">id</span> <span class="p">(</span><span class="n">PK</span><span class="p">)</span>
+<span class="err">├──</span> <span class="n">organizador</span> <span class="p">(</span><span class="n">FK</span> <span class="err">→</span> <span class="n">Usuario</span><span class="p">)</span>
+<span class="err">├──</span> <span class="n">titulo</span>
+<span class="err">├──</span> <span class="n">descripcion</span>
+<span class="err">├──</span> <span class="n">tipo</span>
+<span class="err">├──</span> <span class="n">fecha_inicio</span><span class="o">/</span><span class="n">fin</span>
+<span class="err">├──</span> <span class="n">ubicacion</span>
+<span class="err">├──</span> <span class="n">capacidad_maxima</span>
+<span class="err">└──</span> <span class="n">ParticipanteEvento</span> <span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">N</span><span class="p">)</span>
+    <span class="err">├──</span> <span class="n">usuario</span> <span class="p">(</span><span class="n">FK</span><span class="p">)</span>
+    <span class="err">├──</span> <span class="n">confirmado</span>
+    <span class="err">└──</span> <span class="n">fecha_registro</span>
+</code></pre></div>
+<h3 id="seguimientos_1">Seguimientos</h3>
+<div class="highlight"><pre><span></span><code><span class="n">Seguimiento</span>
+<span class="err">├──</span> <span class="nb">id</span> <span class="p">(</span><span class="n">PK</span><span class="p">)</span>
+<span class="err">├──</span> <span class="n">seguidor</span> <span class="p">(</span><span class="n">FK</span> <span class="err">→</span> <span class="n">Usuario</span><span class="p">)</span>
+<span class="err">├──</span> <span class="n">seguido</span> <span class="p">(</span><span class="n">FK</span> <span class="err">→</span> <span class="n">Usuario</span><span class="p">)</span>
+<span class="err">└──</span> <span class="n">fecha_creacion</span>
+
+<span class="n">Constraint</span><span class="p">:</span> <span class="n">unique</span><span class="p">(</span><span class="n">seguidor</span><span class="p">,</span> <span class="n">seguido</span><span class="p">)</span>
+<span class="n">Validación</span><span class="p">:</span> <span class="n">seguidor</span> <span class="err">≠</span> <span class="n">seguido</span>
+</code></pre></div>
+<hr />
+<h2 id="seguridad-y-autenticacion">🔐 Seguridad y Autenticación</h2>
+<h3 id="actual-django">Actual (Django)</h3>
+<ul>
+<li><strong>Sesiones</strong>: Cookie-based sessions</li>
+<li><strong>CSRF</strong>: Protección habilitada</li>
+<li><strong>Permisos</strong>: IsAuthenticatedOrReadOnly</li>
+<li><strong>Passwords</strong>: Hashing con PBKDF2</li>
+</ul>
+<h3 id="futuro-microservicios">Futuro (Microservicios)</h3>
+<ul>
+<li><strong>JWT</strong>: Tokens en Auth Service</li>
+<li><strong>OAuth2</strong>: Integración con redes sociales</li>
+<li><strong>API Keys</strong>: Para servicios externos</li>
+<li><strong>Rate Limiting</strong>: Prevención de abuso</li>
+</ul>
+<hr />
+<h2 id="dependencias-principales">📦 Dependencias Principales</h2>
+<h3 id="django">Django</h3>
+<div class="highlight"><pre><span></span><code>Django==4.2+
+djangorestframework
+django-cors-headers
+django-filter
+psycopg2-binary
+python-decouple
+Pillow
+</code></pre></div>
+<h3 id="fastapi-microservicios">FastAPI (Microservicios)</h3>
+<div class="highlight"><pre><span></span><code>fastapi
+uvicorn
+pydantic
+requests
+</code></pre></div>
+<h3 id="data-management">Data Management</h3>
+<div class="highlight"><pre><span></span><code>pymongo          # MongoDB
+redis            # Redis
+sqlalchemy       # SQL ORM
+</code></pre></div>
+<hr />
+<h2 id="despliegue">🚀 Despliegue</h2>
+<h3 id="desarrollo-docker-compose">Desarrollo (Docker Compose)</h3>
+<div class="highlight"><pre><span></span><code>docker-compose<span class="w"> </span>up<span class="w"> </span>-d
+</code></pre></div>
+<p><strong>Servicios levantados:</strong>
+- PostgreSQL: <code>localhost:5432</code>
+- Django Web: <code>localhost:8000</code>
+- (Futuro) API Gateway: <code>localhost:8080</code>
+- (Futuro) Microservicios: <code>localhost:8001-8004</code></p>
+<h3 id="produccion-sugerido">Producción (Sugerido)</h3>
+<div class="highlight"><pre><span></span><code>┌─────────────┐
+│   Nginx     │  → Reverse proxy
+└──────┬──────┘
+       │
+       ├─→ Django (Gunicorn) × N instancias
+       ├─→ API Gateway (Uvicorn)
+       └─→ Microservicios (Uvicorn) × N instancias
+
+PostgreSQL (Réplicas)
+Redis (Cluster)
+MongoDB (Replica Set)
+</code></pre></div>
+<hr />
+<h2 id="monitoreo-y-logs">📊 Monitoreo y Logs</h2>
+<h3 id="health-checks">Health Checks</h3>
+<div class="highlight"><pre><span></span><code>GET /health                    # Django
+GET /api/v1/auth/health       # Auth Service
+GET /api/v1/data/health       # Data Management
+GET /api/v1/notifications/health  # Notifications
+GET /api/v1/analytics/health  # Analytics
+</code></pre></div>
+<h3 id="logs">Logs</h3>
+<ul>
+<li><strong>Django</strong>: Logs en consola/archivo</li>
+<li><strong>PostgreSQL</strong>: Query logs</li>
+<li><strong>Microservicios</strong>: Logs en MongoDB (Data Management)</li>
+<li><strong>Docker</strong>: <code>docker-compose logs -f</code></li>
+</ul>
+<hr />
+<p><strong>Documento creado para visualizar la arquitectura de servicios</strong></p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Volver al principio
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.tabs", "navigation.sections", "navigation.top"], "search": "../assets/javascripts/workers/search.7a47a382.min.js", "tags": null, "translations": {"clipboard.copied": "Copiado al portapapeles", "clipboard.copy": "Copiar al portapapeles", "search.result.more.one": "1 m\u00e1s en esta p\u00e1gina", "search.result.more.other": "# m\u00e1s en esta p\u00e1gina", "search.result.none": "No se encontraron documentos", "search.result.one": "1 documento encontrado", "search.result.other": "# documentos encontrados", "search.result.placeholder": "Teclee para comenzar b\u00fasqueda", "search.result.term.missing": "Falta", "select.version": "Seleccionar versi\u00f3n"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.e71a0d61.min.js"></script>
+      
+    
+  </body>
+</html>

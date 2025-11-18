@@ -1,0 +1,2162 @@
+
+<!doctype html>
+<html lang="es" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Documentación técnica del proyecto de red social para deportistas.">
+      
+      
+        <meta name="author" content="jose saavedra y narciso yudai">
+      
+      
+      
+        <link rel="prev" href="../INDICE_DOCUMENTACION/">
+      
+      
+        <link rel="next" href="../MAPA_SERVICIOS/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.0">
+    
+    
+      
+        <title>🏗️ Arquitectura - Documentación - Red Social Deportistas</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.618322db.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/_mkdocstrings.css">
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#arquitectura-detallada-red-social-para-deportistas" class="md-skip">
+          Saltar a contenido
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Cabecera">
+    <a href=".." title="Documentación - Red Social Deportistas" class="md-header__button md-logo" aria-label="Documentación - Red Social Deportistas" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Documentación - Red Social Deportistas
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              🏗️ Arquitectura
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Cambiar a modo oscuro"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Cambiar a modo oscuro" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Cambiar a modo claro"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Cambiar a modo claro" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Búsqueda" placeholder="Búsqueda" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Buscar">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Limpiar" aria-label="Limpiar" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Inicializando búsqueda
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/saavedra-jose/Red-social-Deportistas" title="Ir al repositorio" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Pestañas" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href=".." class="md-tabs__link">
+        
+  
+  
+    
+  
+  👋 Bienvenida
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../proyecto/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  🚀 Guía de Inicio (README)
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../INDICE_DOCUMENTACION/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  📚 Índice General
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    <li class="md-tabs__item md-tabs__item--active">
+      <a href="./" class="md-tabs__link">
+        
+  
+  
+    
+  
+  🏗️ Arquitectura
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../MAPA_SERVICIOS/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  🗺️ Mapa de Servicios
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../GUIA_CARPETAS_Y_ARCHIVOS/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  📂 Guía de Archivos
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../RESUMEN_CAMBIOS/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  📋 Resumen de Cambios
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navegación" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="Documentación - Red Social Deportistas" class="md-nav__button md-logo" aria-label="Documentación - Red Social Deportistas" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Documentación - Red Social Deportistas
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/saavedra-jose/Red-social-Deportistas" title="Ir al repositorio" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    👋 Bienvenida
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../proyecto/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    🚀 Guía de Inicio (README)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../INDICE_DOCUMENTACION/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    📚 Índice General
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    🏗️ Arquitectura
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    🏗️ Arquitectura
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Tabla de contenidos">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Tabla de contenidos
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#indice" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📋 Índice
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#vision-general" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Visión General
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Visión General">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#proposito-del-sistema" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Propósito del Sistema
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#arquitectura-del-sistema" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Arquitectura del Sistema
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#estructura-de-carpetas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📁 Estructura de Carpetas
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="📁 Estructura de Carpetas">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#raiz-del-proyecto" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Raíz del Proyecto
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#deportistas_network" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        deportistas_network/
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#usuarios" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        usuarios/
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#publicaciones" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        publicaciones/
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#eventos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        eventos/
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#seguimientos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        seguimientos/
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#services" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        services/
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="services/">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#servicesauthentication" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        services/authentication/
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#servicesdata-management-antes-service1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        services/data-management/ (antes service1)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#servicesnotifications-antes-service2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        services/notifications/ (antes service2)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#servicesanalytics-antes-service3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        services/analytics/ (antes service3)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#api-gateway" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        api-gateway/
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#frontend" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        frontend/
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#templates" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        templates/
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#staticfiles-y-media" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        staticfiles/ y media/
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#common" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        common/
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#flujo-de-datos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🔄 Flujo de Datos
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🔄 Flujo de Datos">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#flujo-de-una-publicacion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Flujo de una Publicación
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#flujo-de-autenticacion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Flujo de Autenticación
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tecnologias-utilizadas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🛠️ Tecnologías Utilizadas
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🛠️ Tecnologías Utilizadas">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#backend" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Backend
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#frontend_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Frontend
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#devops" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        DevOps
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#librerias-python" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Librerías Python
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#como-funciona-el-sistema" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🚀 Cómo Funciona el Sistema
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🚀 Cómo Funciona el Sistema">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#inicio-del-sistema" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Inicio del Sistema
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#operacion-normal" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Operación Normal
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#escalabilidad" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Escalabilidad
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#diagrama-de-base-de-datos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📊 Diagrama de Base de Datos
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#casos-de-uso-principales" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🎯 Casos de Uso Principales
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#seguridad" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🔐 Seguridad
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#proximos-pasos-sugeridos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📝 Próximos Pasos Sugeridos
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../MAPA_SERVICIOS/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    🗺️ Mapa de Servicios
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../GUIA_CARPETAS_Y_ARCHIVOS/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    📂 Guía de Archivos
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../RESUMEN_CAMBIOS/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    📋 Resumen de Cambios
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Tabla de contenidos">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Tabla de contenidos
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#indice" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📋 Índice
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#vision-general" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Visión General
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Visión General">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#proposito-del-sistema" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Propósito del Sistema
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#arquitectura-del-sistema" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Arquitectura del Sistema
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#estructura-de-carpetas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📁 Estructura de Carpetas
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="📁 Estructura de Carpetas">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#raiz-del-proyecto" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Raíz del Proyecto
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#deportistas_network" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        deportistas_network/
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#usuarios" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        usuarios/
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#publicaciones" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        publicaciones/
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#eventos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        eventos/
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#seguimientos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        seguimientos/
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#services" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        services/
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="services/">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#servicesauthentication" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        services/authentication/
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#servicesdata-management-antes-service1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        services/data-management/ (antes service1)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#servicesnotifications-antes-service2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        services/notifications/ (antes service2)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#servicesanalytics-antes-service3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        services/analytics/ (antes service3)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#api-gateway" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        api-gateway/
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#frontend" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        frontend/
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#templates" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        templates/
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#staticfiles-y-media" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        staticfiles/ y media/
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#common" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        common/
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#flujo-de-datos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🔄 Flujo de Datos
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🔄 Flujo de Datos">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#flujo-de-una-publicacion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Flujo de una Publicación
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#flujo-de-autenticacion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Flujo de Autenticación
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tecnologias-utilizadas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🛠️ Tecnologías Utilizadas
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🛠️ Tecnologías Utilizadas">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#backend" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Backend
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#frontend_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Frontend
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#devops" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        DevOps
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#librerias-python" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Librerías Python
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#como-funciona-el-sistema" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🚀 Cómo Funciona el Sistema
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🚀 Cómo Funciona el Sistema">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#inicio-del-sistema" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Inicio del Sistema
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#operacion-normal" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Operación Normal
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#escalabilidad" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Escalabilidad
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#diagrama-de-base-de-datos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📊 Diagrama de Base de Datos
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#casos-de-uso-principales" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🎯 Casos de Uso Principales
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#seguridad" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🔐 Seguridad
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#proximos-pasos-sugeridos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📝 Próximos Pasos Sugeridos
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="arquitectura-detallada-red-social-para-deportistas">🏗️ Arquitectura Detallada - Red Social para Deportistas</h1>
+<h2 id="indice">📋 Índice</h2>
+<ol>
+<li><a href="#vision-general">Visión General</a></li>
+<li><a href="#arquitectura-del-sistema">Arquitectura del Sistema</a></li>
+<li><a href="#estructura-de-carpetas">Estructura de Carpetas y Componentes</a></li>
+<li><a href="#flujo-de-datos">Flujo de Datos</a></li>
+<li><a href="#tecnologias-utilizadas">Tecnologías Utilizadas</a></li>
+</ol>
+<hr />
+<h2 id="vision-general">Visión General</h2>
+<p>Este proyecto es una <strong>Red Social para Deportistas</strong> construida con una arquitectura híbrida que combina:
+- <strong>Django</strong> como framework principal (monolito modular)
+- <strong>Microservicios FastAPI</strong> para funcionalidades específicas
+- <strong>API Gateway</strong> para enrutamiento de microservicios
+- <strong>PostgreSQL</strong> como base de datos principal
+- <strong>Docker</strong> para containerización</p>
+<h3 id="proposito-del-sistema">Propósito del Sistema</h3>
+<p>Plataforma social donde deportistas pueden:
+- Crear perfiles deportivos personalizados
+- Publicar contenido y sesiones de entrenamiento
+- Seguir a otros deportistas
+- Organizar y participar en eventos deportivos
+- Interactuar mediante likes y comentarios</p>
+<hr />
+<h2 id="arquitectura-del-sistema">Arquitectura del Sistema</h2>
+<div class="highlight"><pre><span></span><code>┌─────────────────────────────────────────────────────────────┐
+│                        CLIENTE WEB                          │
+│                    (Navegador/Frontend)                     │
+└────────────────────────┬────────────────────────────────────┘
+                         │
+                         ▼
+┌─────────────────────────────────────────────────────────────┐
+│                   APLICACIÓN DJANGO                         │
+│              (Puerto 8000 - Monolito)                       │
+│  ┌──────────┬──────────┬──────────┬──────────────────┐    │
+│  │ Usuarios │ Publicac.│ Eventos  │ Seguimientos     │    │
+│  └──────────┴──────────┴──────────┴──────────────────┘    │
+└────────────────────────┬────────────────────────────────────┘
+                         │
+                         ▼
+┌─────────────────────────────────────────────────────────────┐
+│                  BASE DE DATOS PostgreSQL                   │
+│                      (Puerto 5432)                          │
+└─────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────┐
+│                    API GATEWAY (FastAPI)                    │
+│                      (Puerto 8080)                          │
+└────────────┬────────────┬────────────┬─────────────────────┘
+             │            │            │
+             ▼            ▼            ▼
+    ┌────────────┐ ┌────────────┐ ┌────────────┐
+    │   Auth     │ │Data Mgmt   │ │Notificac.  │
+    │  Service   │ │  Service   │ │  Service   │
+    └────────────┘ └────────────┘ └────────────┘
+</code></pre></div>
+<hr />
+<h2 id="estructura-de-carpetas">📁 Estructura de Carpetas</h2>
+<h3 id="raiz-del-proyecto"><strong>Raíz del Proyecto</strong></h3>
+<div class="highlight"><pre><span></span><code>Red-social-Deportistas/
+├── 📄 manage.py                    # Script principal de Django
+├── 📄 docker-compose.yml           # Orquestación de contenedores
+├── 📄 Dockerfile                   # Imagen Docker para Django
+├── 📄 requirements.txt             # Dependencias Python principales
+├── 📄 requirements-dev.txt         # Dependencias de desarrollo
+└── 📄 entrypoint.sh               # Script de inicio del contenedor
+</code></pre></div>
+<p><strong>Utilidad:</strong>
+- <code>manage.py</code>: Punto de entrada para comandos Django (migraciones, servidor, etc.)
+- <code>docker-compose.yml</code>: Define y conecta todos los servicios (web, db, microservicios)
+- <code>Dockerfile</code>: Instrucciones para construir la imagen Docker de Django
+- <code>requirements.txt</code>: Lista de paquetes Python necesarios para producción
+- <code>entrypoint.sh</code>: Ejecuta migraciones y arranca el servidor al iniciar el contenedor</p>
+<hr />
+<h3 id="deportistas_network"><strong>deportistas_network/</strong></h3>
+<p><strong>Configuración principal de Django</strong></p>
+<div class="highlight"><pre><span></span><code>deportistas_network/
+├── __init__.py                     # Marca el directorio como paquete Python
+├── settings.py                     # Configuración global del proyecto
+├── urls.py                         # Enrutamiento principal de URLs
+├── wsgi.py                         # Interfaz WSGI para servidores de producción
+└── asgi.py                         # Interfaz ASGI para aplicaciones asíncronas
+</code></pre></div>
+<p><strong>Utilidad:</strong>
+- <code>settings.py</code>: Configura base de datos, apps instaladas, middleware, autenticación, CORS, archivos estáticos
+- <code>urls.py</code>: Define las rutas principales y distribuye a las apps
+- <code>wsgi.py/asgi.py</code>: Interfaces para servidores web (Gunicorn, Uvicorn, etc.)</p>
+<p><strong>Configuraciones clave en settings.py:</strong>
+- Modelo de usuario personalizado: <code>AUTH_USER_MODEL = 'usuarios.Usuario'</code>
+- Base de datos PostgreSQL configurada con variables de entorno
+- Django REST Framework con autenticación por sesión
+- CORS habilitado para desarrollo
+- Zona horaria: America/Bogota</p>
+<hr />
+<h3 id="usuarios"><strong>usuarios/</strong></h3>
+<p><strong>Gestión de usuarios y perfiles deportivos</strong></p>
+<div class="highlight"><pre><span></span><code>usuarios/
+├── models.py                       # Modelos: Usuario, PerfilDeportista
+├── views.py                        # Vistas API REST
+├── views_web.py                    # Vistas web (templates)
+├── serializers.py                  # Serializadores DRF
+├── urls.py                         # URLs API
+├── urls_web.py                     # URLs web
+├── forms.py                        # Formularios Django
+├── admin.py                        # Configuración del admin
+└── migrations/                     # Migraciones de base de datos
+</code></pre></div>
+<p><strong>Modelos:</strong>
+1. <strong>Usuario</strong> (extiende AbstractUser de Django)
+   - Campos: email único, teléfono, fecha_nacimiento, es_verificado
+   - Autenticación y autorización base del sistema</p>
+<ol>
+<li><strong>PerfilDeportista</strong> (relación 1:1 con Usuario)</li>
+<li>Deporte principal y secundarios</li>
+<li>Nivel deportivo (principiante → profesional)</li>
+<li>Biografía, fotos (perfil y portada)</li>
+<li>Redes sociales (Instagram, Twitter)</li>
+<li>Ubicación y sitio web</li>
+</ol>
+<p><strong>Funcionalidad:</strong>
+- Registro y autenticación de usuarios
+- Gestión de perfiles deportivos
+- API REST para operaciones CRUD
+- Vistas web con templates HTML</p>
+<hr />
+<h3 id="publicaciones"><strong>publicaciones/</strong></h3>
+<p><strong>Sistema de publicaciones y entrenamientos</strong></p>
+<div class="highlight"><pre><span></span><code>publicaciones/
+├── models.py                       # Modelos: Publicacion, Like, Comentario, SesionEntrenamiento
+├── views.py                        # API REST endpoints
+├── views_web.py                    # Vistas web
+├── serializers.py                  # Serializadores DRF
+├── urls.py                         # URLs API
+├── urls_web.py                     # URLs web
+├── admin.py                        # Panel de administración
+└── migrations/                     # Migraciones
+</code></pre></div>
+<p><strong>Modelos:</strong>
+1. <strong>Publicacion</strong>
+   - Contenido de texto (max 2000 caracteres)
+   - Imagen opcional
+   - Tipo: normal o entrenamiento
+   - Contadores: likes_count, comentarios_count
+   - Timestamps automáticos</p>
+<ol>
+<li><strong>Like</strong></li>
+<li>Relación usuario-publicación</li>
+<li>
+<p>Constraint único (un like por usuario por publicación)</p>
+</li>
+<li>
+<p><strong>Comentario</strong></p>
+</li>
+<li>Contenido (max 1000 caracteres)</li>
+<li>Relación con usuario y publicación</li>
+<li>
+<p>Ordenados cronológicamente</p>
+</li>
+<li>
+<p><strong>SesionEntrenamiento</strong></p>
+</li>
+<li>Deporte y estado (activo, pausado, completado, cancelado)</li>
+<li>Tiempos: inicio, fin, tiempo_pausado</li>
+<li>Métricas: distancia (km), calorías</li>
+<li>Vinculada a una Publicacion</li>
+</ol>
+<p><strong>Funcionalidad:</strong>
+- Feed de publicaciones
+- Sistema de likes y comentarios
+- Tracking de sesiones de entrenamiento en tiempo real
+- Generación automática de publicaciones desde entrenamientos</p>
+<hr />
+<h3 id="eventos"><strong>eventos/</strong></h3>
+<p><strong>Organización de eventos deportivos</strong></p>
+<div class="highlight"><pre><span></span><code>eventos/
+├── models.py                       # Modelos: EventoDeportivo, ParticipanteEvento
+├── views.py                        # API REST
+├── views_web.py                    # Vistas web
+├── serializers.py                  # Serializadores
+├── urls.py                         # URLs API
+├── urls_web.py                     # URLs web
+├── admin.py                        # Admin
+└── migrations/                     # Migraciones
+</code></pre></div>
+<p><strong>Modelos:</strong>
+1. <strong>EventoDeportivo</strong>
+   - Título, descripción, tipo (competición, entrenamiento, torneo, etc.)
+   - Fechas: inicio y fin
+   - Ubicación física
+   - Capacidad máxima y contador de participantes
+   - Visibilidad: público/privado
+   - Organizador (ForeignKey a Usuario)</p>
+<ol>
+<li><strong>ParticipanteEvento</strong></li>
+<li>Relación usuario-evento</li>
+<li>Estado de confirmación</li>
+<li>Fecha de registro</li>
+</ol>
+<p><strong>Funcionalidad:</strong>
+- Creación y gestión de eventos deportivos
+- Sistema de inscripción de participantes
+- Control de capacidad
+- Filtrado por fecha, tipo, ubicación</p>
+<hr />
+<h3 id="seguimientos"><strong>seguimientos/</strong></h3>
+<p><strong>Sistema de seguimiento entre usuarios</strong></p>
+<div class="highlight"><pre><span></span><code>seguimientos/
+├── models.py                       # Modelo: Seguimiento
+├── views.py                        # API REST
+├── serializers.py                  # Serializadores
+├── urls.py                         # URLs
+├── admin.py                        # Admin
+└── migrations/                     # Migraciones
+</code></pre></div>
+<p><strong>Modelo:</strong>
+- <strong>Seguimiento</strong>
+  - Seguidor (quien sigue)
+  - Seguido (a quien siguen)
+  - Constraint único (no duplicar seguimientos)
+  - Validación: usuario no puede seguirse a sí mismo</p>
+<p><strong>Funcionalidad:</strong>
+- Seguir/dejar de seguir usuarios
+- Listar seguidores y seguidos
+- Base para feed personalizado</p>
+<hr />
+<h3 id="services"><strong>services/</strong></h3>
+<p><strong>Microservicios FastAPI</strong></p>
+<h4 id="servicesauthentication"><strong>services/authentication/</strong></h4>
+<p><strong>Servicio de autenticación (FastAPI)</strong></p>
+<div class="highlight"><pre><span></span><code>authentication/
+├── main.py                         # Aplicación FastAPI
+├── Dockerfile                      # Imagen Docker
+└── requirements.txt                # Dependencias
+</code></pre></div>
+<p><strong>Utilidad:</strong>
+- Microservicio para autenticación JWT (en desarrollo)
+- Endpoint de health check
+- Separación de responsabilidades de autenticación</p>
+<hr />
+<h4 id="servicesdata-management-antes-service1"><strong>services/data-management/</strong> (antes service1)</h4>
+<p><strong>Servicio de gestión de datos multi-base de datos</strong></p>
+<div class="highlight"><pre><span></span><code>data-management/
+├── main.py                         # Aplicación FastAPI
+├── models.py                       # Modelos Pydantic
+├── database_sql.py                 # Conexión SQL (PostgreSQL/MySQL)
+├── database_mongo.py               # Conexión MongoDB
+├── database_redis.py               # Conexión Redis (caché)
+├── Dockerfile                      # Imagen Docker
+└── requirements.txt                # Dependencias
+</code></pre></div>
+<p><strong>Utilidad:</strong>
+- Gestión de múltiples tipos de bases de datos
+- Caché con Redis para datos frecuentes
+- MongoDB para datos no estructurados (logs, métricas)
+- SQL para datos relacionales complementarios
+- Ideal para: estadísticas, caché de sesiones, logs de actividad</p>
+<hr />
+<h4 id="servicesnotifications-antes-service2"><strong>services/notifications/</strong> (antes service2)</h4>
+<p><strong>Servicio de notificaciones (plantilla)</strong></p>
+<div class="highlight"><pre><span></span><code>notifications/
+├── main.py                         # Aplicación FastAPI
+├── models.py                       # Modelos Pydantic
+├── Dockerfile                      # Imagen Docker
+└── requirements.txt                # Dependencias
+</code></pre></div>
+<p><strong>Utilidad (propuesta):</strong>
+- Envío de notificaciones push
+- Notificaciones por email
+- Notificaciones en tiempo real (WebSockets)
+- Alertas de eventos, nuevos seguidores, likes, comentarios</p>
+<hr />
+<h4 id="servicesanalytics-antes-service3"><strong>services/analytics/</strong> (antes service3)</h4>
+<p><strong>Servicio de análisis y métricas (plantilla)</strong></p>
+<div class="highlight"><pre><span></span><code>analytics/
+├── main.py                         # Aplicación FastAPI
+├── models.py                       # Modelos Pydantic
+├── Dockerfile                      # Imagen Docker
+└── requirements.txt                # Dependencias
+</code></pre></div>
+<p><strong>Utilidad (propuesta):</strong>
+- Análisis de rendimiento deportivo
+- Estadísticas de usuario (entrenamientos, progreso)
+- Métricas de engagement (likes, comentarios, seguidores)
+- Reportes y dashboards</p>
+<hr />
+<h3 id="api-gateway"><strong>api-gateway/</strong></h3>
+<p><strong>Gateway de microservicios</strong></p>
+<div class="highlight"><pre><span></span><code>api-gateway/
+├── main.py                         # Aplicación FastAPI
+├── Dockerfile                      # Imagen Docker
+└── requirements.txt                # Dependencias
+</code></pre></div>
+<p><strong>Utilidad:</strong>
+- Punto de entrada único para todos los microservicios
+- Enrutamiento dinámico: <code>/api/v1/{service_name}/{path}</code>
+- Manejo de CORS
+- Forwarding de peticiones GET y POST
+- Health check centralizado</p>
+<p><strong>Configuración:</strong>
+<div class="highlight"><pre><span></span><code><span class="n">SERVICES</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;auth&quot;</span><span class="p">:</span> <span class="s2">&quot;http://auth-service:8001&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;data&quot;</span><span class="p">:</span> <span class="s2">&quot;http://data-service:8002&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;notifications&quot;</span><span class="p">:</span> <span class="s2">&quot;http://notifications-service:8003&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;analytics&quot;</span><span class="p">:</span> <span class="s2">&quot;http://analytics-service:8004&quot;</span><span class="p">,</span>
+<span class="p">}</span>
+</code></pre></div></p>
+<hr />
+<h3 id="frontend"><strong>frontend/</strong></h3>
+<p><strong>Aplicación frontend (Flask - opcional)</strong></p>
+<div class="highlight"><pre><span></span><code>frontend/
+├── app.py                          # Aplicación Flask
+├── Dockerfile                      # Imagen Docker
+├── requirements.txt                # Dependencias
+├── templates/                      # Templates HTML
+└── static/                         # CSS, JS, imágenes
+</code></pre></div>
+<p><strong>Utilidad:</strong>
+- Frontend alternativo con Flask
+- Consume APIs de Django y microservicios
+- Separación frontend/backend</p>
+<hr />
+<h3 id="templates"><strong>templates/</strong></h3>
+<p><strong>Templates HTML de Django</strong></p>
+<div class="highlight"><pre><span></span><code>templates/
+├── base.html                       # Template base (herencia)
+├── usuarios/                       # Templates de usuarios
+├── publicaciones/                  # Templates de publicaciones
+└── eventos/                        # Templates de eventos
+</code></pre></div>
+<p><strong>Utilidad:</strong>
+- Vistas web renderizadas por Django
+- Sistema de herencia de templates
+- Interfaz web tradicional (server-side rendering)</p>
+<hr />
+<h3 id="staticfiles-y-media"><strong>staticfiles/</strong> y <strong>media/</strong></h3>
+<div class="highlight"><pre><span></span><code>staticfiles/                        # Archivos estáticos (CSS, JS)
+media/                              # Archivos subidos por usuarios
+├── perfiles/                       # Fotos de perfil
+├── portadas/                       # Fotos de portada
+├── publicaciones/                  # Imágenes de publicaciones
+└── eventos/                        # Imágenes de eventos
+</code></pre></div>
+<p><strong>Utilidad:</strong>
+- <code>staticfiles/</code>: Archivos estáticos recolectados con <code>collectstatic</code>
+- <code>media/</code>: Contenido generado por usuarios (imágenes, archivos)</p>
+<hr />
+<h3 id="common"><strong>common/</strong></h3>
+<p><strong>Código compartido</strong></p>
+<div class="highlight"><pre><span></span><code>common/
+├── config.py                       # Configuraciones compartidas
+└── helpers/                        # Funciones auxiliares
+</code></pre></div>
+<p><strong>Utilidad:</strong>
+- Código reutilizable entre apps
+- Configuraciones comunes
+- Utilidades y helpers</p>
+<hr />
+<h2 id="flujo-de-datos">🔄 Flujo de Datos</h2>
+<h3 id="flujo-de-una-publicacion">Flujo de una Publicación</h3>
+<div class="highlight"><pre><span></span><code>1. Usuario crea publicación (Web/API)
+   ↓
+2. Django recibe request → views.py
+   ↓
+3. Validación con serializers.py
+   ↓
+4. Guardado en PostgreSQL (models.py)
+   ↓
+5. Respuesta JSON/HTML al cliente
+   ↓
+6. [Opcional] Notificación a seguidores (microservicio)
+   ↓
+7. [Opcional] Actualización de analytics (microservicio)
+</code></pre></div>
+<h3 id="flujo-de-autenticacion">Flujo de Autenticación</h3>
+<div class="highlight"><pre><span></span><code>1. Usuario envía credenciales
+   ↓
+2. Django valida contra modelo Usuario
+   ↓
+3. Genera token/sesión
+   ↓
+4. [Futuro] API Gateway → Auth Service (JWT)
+   ↓
+5. Token devuelto al cliente
+   ↓
+6. Cliente incluye token en requests subsecuentes
+</code></pre></div>
+<hr />
+<h2 id="tecnologias-utilizadas">🛠️ Tecnologías Utilizadas</h2>
+<h3 id="backend">Backend</h3>
+<ul>
+<li><strong>Django 4.2+</strong>: Framework web principal</li>
+<li><strong>Django REST Framework</strong>: APIs RESTful</li>
+<li><strong>FastAPI</strong>: Microservicios de alto rendimiento</li>
+<li><strong>PostgreSQL 15</strong>: Base de datos relacional</li>
+<li><strong>Redis</strong>: Caché (en data-management)</li>
+<li><strong>MongoDB</strong>: Base de datos NoSQL (en data-management)</li>
+</ul>
+<h3 id="frontend_1">Frontend</h3>
+<ul>
+<li><strong>HTML/CSS/JavaScript</strong>: Templates Django</li>
+<li><strong>Flask</strong>: Frontend alternativo (opcional)</li>
+</ul>
+<h3 id="devops">DevOps</h3>
+<ul>
+<li><strong>Docker</strong>: Containerización</li>
+<li><strong>Docker Compose</strong>: Orquestación multi-contenedor</li>
+<li><strong>Gunicorn/Uvicorn</strong>: Servidores WSGI/ASGI</li>
+</ul>
+<h3 id="librerias-python">Librerías Python</h3>
+<ul>
+<li><code>python-decouple</code>: Variables de entorno</li>
+<li><code>Pillow</code>: Procesamiento de imágenes</li>
+<li><code>django-cors-headers</code>: CORS</li>
+<li><code>django-filter</code>: Filtrado avanzado</li>
+<li><code>requests</code>: HTTP client para API Gateway</li>
+</ul>
+<hr />
+<h2 id="como-funciona-el-sistema">🚀 Cómo Funciona el Sistema</h2>
+<h3 id="inicio-del-sistema">Inicio del Sistema</h3>
+<ol>
+<li><strong>Docker Compose</strong> levanta todos los servicios</li>
+<li><strong>PostgreSQL</strong> inicia primero (healthcheck)</li>
+<li><strong>Django</strong> espera a que DB esté lista</li>
+<li><strong>Migraciones</strong> se ejecutan automáticamente (entrypoint.sh)</li>
+<li><strong>Servidor Django</strong> arranca en puerto 8000</li>
+<li><strong>Microservicios</strong> arrancan en sus puertos respectivos</li>
+<li><strong>API Gateway</strong> se conecta a los microservicios</li>
+</ol>
+<h3 id="operacion-normal">Operación Normal</h3>
+<ul>
+<li><strong>Requests web</strong> → Django (puerto 8000)</li>
+<li><strong>Requests API REST</strong> → Django DRF (puerto 8000/api/)</li>
+<li><strong>Requests microservicios</strong> → API Gateway (puerto 8080) → Microservicio específico</li>
+</ul>
+<h3 id="escalabilidad">Escalabilidad</h3>
+<ul>
+<li>Django puede escalar horizontalmente (múltiples instancias)</li>
+<li>Microservicios independientes y escalables</li>
+<li>PostgreSQL puede configurarse con réplicas</li>
+<li>Redis para caché distribuido</li>
+</ul>
+<hr />
+<h2 id="diagrama-de-base-de-datos">📊 Diagrama de Base de Datos</h2>
+<div class="highlight"><pre><span></span><code>Usuario (1) ←→ (1) PerfilDeportista
+   ↓ (1:N)
+Publicacion
+   ↓ (1:N)
+Like, Comentario
+
+Usuario (1) ←→ (N) EventoDeportivo (organizador)
+   ↓ (N:M)
+ParticipanteEvento
+
+Usuario (N) ←→ (M) Usuario (Seguimiento)
+   seguidor ←→ seguido
+</code></pre></div>
+<hr />
+<h2 id="casos-de-uso-principales">🎯 Casos de Uso Principales</h2>
+<ol>
+<li><strong>Registro y Perfil</strong></li>
+<li>
+<p>Usuario se registra → crea perfil deportivo → sube fotos</p>
+</li>
+<li>
+<p><strong>Publicaciones</strong></p>
+</li>
+<li>
+<p>Usuario crea publicación → otros ven en feed → dan like/comentan</p>
+</li>
+<li>
+<p><strong>Entrenamientos</strong></p>
+</li>
+<li>
+<p>Usuario inicia sesión → registra métricas → finaliza → genera publicación</p>
+</li>
+<li>
+<p><strong>Eventos</strong></p>
+</li>
+<li>
+<p>Usuario crea evento → otros se inscriben → organizador gestiona participantes</p>
+</li>
+<li>
+<p><strong>Red Social</strong></p>
+</li>
+<li>Usuario sigue a otros → ve publicaciones de seguidos → interactúa</li>
+</ol>
+<hr />
+<h2 id="seguridad">🔐 Seguridad</h2>
+<ul>
+<li>Autenticación por sesión (Django)</li>
+<li>CSRF protection habilitado</li>
+<li>Validación de datos con serializers</li>
+<li>Permisos por usuario (IsAuthenticatedOrReadOnly)</li>
+<li>Variables de entorno para secretos</li>
+<li>CORS configurado</li>
+</ul>
+<hr />
+<h2 id="proximos-pasos-sugeridos">📝 Próximos Pasos Sugeridos</h2>
+<ol>
+<li><strong>Implementar microservicios</strong>:</li>
+<li>Completar authentication service con JWT</li>
+<li>Desarrollar notifications service</li>
+<li>
+<p>Implementar analytics service</p>
+</li>
+<li>
+<p><strong>Mejorar frontend</strong>:</p>
+</li>
+<li>SPA con React/Vue</li>
+<li>
+<p>WebSockets para notificaciones en tiempo real</p>
+</li>
+<li>
+<p><strong>Optimizaciones</strong>:</p>
+</li>
+<li>Implementar caché con Redis</li>
+<li>Optimizar queries con select_related/prefetch_related</li>
+<li>
+<p>Añadir índices de base de datos</p>
+</li>
+<li>
+<p><strong>Testing</strong>:</p>
+</li>
+<li>Tests unitarios para cada app</li>
+<li>Tests de integración</li>
+<li>Tests E2E</li>
+</ol>
+<hr />
+<p><strong>Documento creado para explicar la arquitectura completa del proyecto Red Social para Deportistas</strong></p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Volver al principio
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.tabs", "navigation.sections", "navigation.top"], "search": "../assets/javascripts/workers/search.7a47a382.min.js", "tags": null, "translations": {"clipboard.copied": "Copiado al portapapeles", "clipboard.copy": "Copiar al portapapeles", "search.result.more.one": "1 m\u00e1s en esta p\u00e1gina", "search.result.more.other": "# m\u00e1s en esta p\u00e1gina", "search.result.none": "No se encontraron documentos", "search.result.one": "1 documento encontrado", "search.result.other": "# documentos encontrados", "search.result.placeholder": "Teclee para comenzar b\u00fasqueda", "search.result.term.missing": "Falta", "select.version": "Seleccionar versi\u00f3n"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.e71a0d61.min.js"></script>
+      
+    
+  </body>
+</html>
