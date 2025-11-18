@@ -178,27 +178,27 @@ Esta documentación está organizada para facilitar la comprensión del proyecto
 → **[Guía de Inicio (README)](proyecto/README.md)** - Sección "Instalación y Ejecución"
 
 #### "¿Qué hace la carpeta X?"
-→ **GUIA_CARPETAS_Y_ARCHIVOS.md** - Sección "Descripción de Carpetas"
+→ **[GUIA_CARPETAS_Y_ARCHIVOS.md](GUIA_CARPETAS_Y_ARCHIVOS.md)** - Sección "Descripción de Carpetas"
 
 #### "¿Qué endpoints están disponibles?"
-→ **MAPA_SERVICIOS.md** - Sección "Endpoints Principales"
+→ **[MAPA_SERVICIOS.md](MAPA_SERVICIOS.md)** - Sección "Endpoints Principales"
 
 #### "¿Cómo funciona el sistema de publicaciones?"
-→ **ARQUITECTURA_DETALLADA.md** - Sección "publicaciones/"
+→ **[ARQUITECTURA_DETALLADA.md](ARQUITECTURA_DETALLADA.md)** - Sección "publicaciones/"
 
 #### "¿Qué modelos de datos hay?"
-→ **MAPA_SERVICIOS.md** - Sección "Modelos de Datos"  
-→ **ARQUITECTURA_DETALLADA.md** - Descripción detallada
+→ **[MAPA_SERVICIOS.md](MAPA_SERVICIOS.md)** - Sección "Modelos de Datos"  
+→ **[ARQUITECTURA_DETALLADA.md](ARQUITECTURA_DETALLADA.md)** - Descripción detallada
 
 #### "¿Cómo se comunican los servicios?"
-→ **MAPA_SERVICIOS.md** - Sección "Flujos de Datos"
+→ **[MAPA_SERVICIOS.md](MAPA_SERVICIOS.md)** - Sección "Flujos de Datos"
 
 #### "¿Qué cambió recientemente?"
-→ **RESUMEN_CAMBIOS.md** - Todo el documento
+→ **[RESUMEN_CAMBIOS.md](RESUMEN_CAMBIOS.md)** - Todo el documento
 
 #### "¿Para qué sirve data-management?"
-→ **RESUMEN_CAMBIOS.md** - Sección "Propósito de Cada Servicio"  
-→ **GUIA_CARPETAS_Y_ARCHIVOS.md** - Sección "services/data-management/"
+→ **[RESUMEN_CAMBIOS.md](RESUMEN_CAMBIOS.md)** - Sección "Propósito de Cada Servicio"  
+→ **[GUIA_CARPETAS_Y_ARCHIVOS.md](GUIA_CARPETAS_Y_ARCHIVOS.md)** - Sección "services/data-management/"
 
 ---
 
@@ -206,11 +206,11 @@ Esta documentación está organizada para facilitar la comprensión del proyecto
 
 | Documento | Longitud | Nivel | Enfoque | Diagramas |
 |-----------|----------|-------|---------|-----------|
-| README.md | Corto | Básico | Instalación | ❌ |
-| GUIA_CARPETAS_Y_ARCHIVOS.md | Medio | Básico-Medio | Estructura | ✅ |
-| ARQUITECTURA_DETALLADA.md | Largo | Medio-Avanzado | Técnico | ✅ |
-| MAPA_SERVICIOS.md | Medio | Medio | Visual/APIs | ✅✅ |
-| RESUMEN_CAMBIOS.md | Corto | Todos | Cambios | ✅ |
+| [README.md](proyecto/README.md) | Corto | Básico | Instalación | ❌ |
+| [GUIA_CARPETAS_Y_ARCHIVOS.md](GUIA_CARPETAS_Y_ARCHIVOS.md) | Medio | Básico-Medio | Estructura | ✅ |
+| [ARQUITECTURA_DETALLADA.md](ARQUITECTURA_DETALLADA.md) | Largo | Medio-Avanzado | Técnico | ✅ |
+| [MAPA_SERVICIOS.md](MAPA_SERVICIOS.md) | Medio | Medio | Visual/APIs | ✅✅ |
+| [RESUMEN_CAMBIOS.md](RESUMEN_CAMBIOS.md) | Corto | Todos | Cambios | ✅ |
 
 ---
 
@@ -289,13 +289,13 @@ Estos documentos deben actualizarse cuando:
 → Lee **[Guía de Inicio (README)](proyecto/README.md)**
 
 **Si tienes 15 minutos:**
-→ Lee **[Guía de Inicio (README)](proyecto/README.md)** + **RESUMEN_CAMBIOS.md**
+→ Lee **[Guía de Inicio (README)](proyecto/README.md)** + **[RESUMEN_CAMBIOS.md](RESUMEN_CAMBIOS.md)**
 
 **Si tienes 30 minutos:**
-→ Lee **README.md** + **GUIA_CARPETAS_Y_ARCHIVOS.md**
+→ Lee **[README.md](proyecto/README.md)** + **[GUIA_CARPETAS_Y_ARCHIVOS.md](GUIA_CARPETAS_Y_ARCHIVOS.md)**
 
 **Si tienes 1 hora:**
-→ Lee **README.md** + **GUIA_CARPETAS_Y_ARCHIVOS.md** + **MAPA_SERVICIOS.md**
+→ Lee **[README.md](proyecto/README.md)** + **[GUIA_CARPETAS_Y_ARCHIVOS.md](GUIA_CARPETAS_Y_ARCHIVOS.md)** + **[MAPA_SERVICIOS.md](MAPA_SERVICIOS.md)**
 
 **Si tienes 2 horas:**
 → Lee todos los documentos en orden

@@ -1,11 +1,11 @@
 # 🏗️ Arquitectura Detallada - Red Social para Deportistas
 
 ## 📋 Índice
-1. [Visión General](#visión-general)
+1. [Visión General](#vision-general)
 2. [Arquitectura del Sistema](#arquitectura-del-sistema)
 3. [Estructura de Carpetas y Componentes](#estructura-de-carpetas)
 4. [Flujo de Datos](#flujo-de-datos)
-5. [Tecnologías Utilizadas](#tecnologías-utilizadas)
+5. [Tecnologías Utilizadas](#tecnologias-utilizadas)
 
 ---
 
