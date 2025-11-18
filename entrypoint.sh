@@ -17,4 +17,4 @@ echo "Recopilando archivos estaticos..."
 python manage.py collectstatic --noinput
 
 echo "Iniciando servidor Django..."
-python manage.py runserver 0.0.0.0:8000
+gunicorn --bind 0.0.0.0:8000 deportistas_network.wsgi:application
