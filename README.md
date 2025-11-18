@@ -2,7 +2,7 @@
 
 | Código | Nombre | Correo |
 |:---|:---|:---|
-|01| Jose Fernady Saavedra Duran|jose.saavedra.9076@miremington.edu.co|
+|01| Jose Fernandy Saavedra Duran|jose.saavedra.9076@miremington.edu.co|
 |02| Narciso Yunda Yunda | narciso.yunda.7718@miremington.edu.co |
 
 ---
