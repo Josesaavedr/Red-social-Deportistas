@@ -57,6 +57,7 @@
             {% if publicacion.duracion %}
               · <i class="fas fa-stopwatch"></i> {{ publicacion.duracion }}
             {% endif %}
+            · <i class="fas fa-comment"></i> {{ publicacion.comments|length if publicacion.comments is defined else 0 }}
           </small>
         </div>
       {% endfor %}

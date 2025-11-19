@@ -86,6 +86,7 @@ def register_publication(data: dict, owner: str):
     publication.setdefault("likes", 0)
     publication.setdefault("liked_by", [])
     publication.setdefault("duracion", None)
+    publication.setdefault("comments", [])
     publication["owner"] = owner
     with PUBLICATION_LOCK:
         publication["id"] = PUBLICATION_SEQUENCE
@@ -143,6 +144,7 @@ def lista_publicaciones():
     remote_posts = normalize_api_list(payload)
     for post in remote_posts:
         post.setdefault("likes", 0)
+        post.setdefault("comments", [])
 
     publicaciones_feed = list(GLOBAL_PUBLICATIONS) + remote_posts
     liked_posts = session.get('liked_publications', [])
@@ -278,6 +280,30 @@ def like_publicacion(pub_id: int):
     session['liked_publications'] = liked_posts
     session.modified = True
     return jsonify({"success": True, "likes": publication["likes"]})
+
+
+@app.post("/publicaciones/<int:pub_id>/comentarios")
+def comentar_publicacion(pub_id: int):
+    if 'user_id' not in session:
+        return jsonify({"success": False, "message": "Debes iniciar sesión"}), 401
+
+    publication = find_publication(pub_id)
+    if not publication:
+        return jsonify({"success": False, "message": "Publicación no encontrada"}), 404
+
+    payload = request.get_json(silent=True) or {}
+    comentario = (payload.get("comentario") or "").strip()
+    if not comentario:
+        return jsonify({"success": False, "message": "Escribe un comentario"}), 400
+
+    comment = {
+        "autor": session.get('user_id'),
+        "perfil": get_profile_from_session(session.get('user_id')).get("photo_url"),
+        "texto": comentario,
+        "fecha": datetime.utcnow().strftime("%Y-%m-%d %H:%M"),
+    }
+    publication.setdefault("comments", []).append(comment)
+    return jsonify({"success": True, "comment": comment, "total": len(publication["comments"])})
 
 # ==================== EVENTOS ====================
 @app.route("/eventos")
@@ -501,7 +527,6 @@ def perfil_usuario():
     stats = {
         "publicaciones": len(user_publications),
         "eventos": len(user_events),
-        "seguidores": max(12, len(user_publications) * 3),
     }
 
     return render_template(

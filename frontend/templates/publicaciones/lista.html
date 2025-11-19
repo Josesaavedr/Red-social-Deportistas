@@ -64,6 +64,27 @@
     flex-wrap: wrap;
     gap: 1rem;
   }
+  .comments-block {
+    margin-top: 1.25rem;
+    border-top: 1px solid #eee;
+    padding-top: 1rem;
+  }
+  .comment-item {
+    padding: .5rem 0;
+    border-bottom: 1px solid #f4f4f4;
+  }
+  .comment-item:last-child {
+    border-bottom: none;
+  }
+  .comment-meta {
+    font-size: 0.85rem;
+    color: #8d99ae;
+  }
+  .comment-form textarea {
+    width: 100%;
+    min-height: 70px;
+    margin-bottom: .5rem;
+  }
   .tag-pill {
     display: inline-flex;
     align-items: center;
@@ -238,7 +259,7 @@
                 {% endif %}
                 likes
               </span>
-              <span><i class="fas fa-comment"></i> {{ publicacion.comentarios or 0 }} comentarios</span>
+              <span><i class="fas fa-comment"></i> {{ publicacion.comments|length if publicacion.comments is defined else 0 }} comentarios</span>
             </div>
             {% if publicacion.id %}
             <button
@@ -257,6 +278,31 @@
             </button>
             {% endif %}
           </div>
+          {% if publicacion.id %}
+          <div class="comments-block">
+            <strong>Comentarios</strong>
+            <div id="comments-list-{{ publicacion.id }}">
+              {% if publicacion.comments %}
+                {% for comentario in publicacion.comments %}
+                <div class="comment-item">
+                  <div class="comment-meta">
+                    <i class="fas fa-user-circle"></i> {{ comentario.autor or 'Usuario' }} · {{ comentario.fecha or '' }}
+                  </div>
+                  <p style="margin: .25rem 0 0 0;">{{ comentario.texto }}</p>
+                </div>
+                {% endfor %}
+              {% else %}
+                <p class="comment-empty" style="color:#999;">Sé el primero en comentar.</p>
+              {% endif %}
+            </div>
+            <form class="comment-form" data-comment-url="{{ url_for('comentar_publicacion', pub_id=publicacion.id) }}" data-publication-id="{{ publicacion.id }}">
+              <textarea placeholder="Escribe un comentario..." required></textarea>
+              <button type="submit" class="btn btn-secondary" style="justify-content: center;">
+                <i class="fas fa-paper-plane"></i> Comentar
+              </button>
+            </form>
+          </div>
+          {% endif %}
         </div>
       </article>
     {% endfor %}
@@ -428,6 +474,49 @@ document.addEventListener('DOMContentLoaded', () => {
         btn.innerHTML = '<i class="fas fa-thumbs-up"></i> ¡Te gusta!';
       } catch (error) {
         alert(error.message || 'Ocurrió un error al registrar tu me gusta.');
+      }
+    });
+  });
+
+  document.querySelectorAll('.comment-form').forEach((form) => {
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const textarea = form.querySelector('textarea');
+      const texto = textarea.value.trim();
+      if (!texto) return;
+      const url = form.dataset.commentUrl;
+      const pubId = form.dataset.publicationId;
+      try {
+        const response = await fetch(url, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ comentario: texto }),
+        });
+        const data = await response.json();
+        if (!response.ok || !data.success) {
+          throw new Error(data.message || 'No se pudo enviar el comentario.');
+        }
+        const list = document.getElementById(`comments-list-${pubId}`);
+        if (list) {
+          const emptyMsg = list.querySelector('.comment-empty');
+          if (emptyMsg) emptyMsg.remove();
+          const wrapper = document.createElement('div');
+          wrapper.className = 'comment-item';
+          wrapper.innerHTML = `
+            <div class="comment-meta">
+              <i class="fas fa-user-circle"></i> ${data.comment.autor || 'Tú'} · ${data.comment.fecha || ''}
+            </div>
+            <p style="margin:.25rem 0 0 0;">${data.comment.texto}</p>
+          `;
+          list.appendChild(wrapper);
+        }
+        textarea.value = '';
+        const statsSpan = form.closest('.feed-card').querySelector('.feed-stats span:last-child');
+        if (statsSpan) {
+          statsSpan.innerHTML = `<i class="fas fa-comment"></i> ${data.total} comentarios`;
+        }
+      } catch (error) {
+        alert(error.message || 'Ocurrió un error al enviar tu comentario.');
       }
     });
   });
