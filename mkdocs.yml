@@ -1,8 +1,8 @@
 site_name: Documentación - Red Social Deportistas
 site_description: 'Documentación técnica del proyecto de red social para deportistas.'
 site_author: 'jose saavedra y yudai narciso'
-site_url: https://josesaavedr.github.io/Red-social-Deportistas/
-
+# La URL donde se desplegará tu sitio. Es importante para el SEO y los enlaces.
+site_url: https://Josesaavedr.github.io/Red-social-Deportistas
 repo_url: https://github.com/Josesaavedr/Red-social-Deportistas.git
 theme:
   name: material
@@ -21,10 +21,30 @@ theme:
   features:
     - navigation.tabs
     - navigation.top
-
+  
+plugins:
+  - search
+  
 markdown_extensions:
   - pymdownx.superfences:
       custom_fences:
         - name: mermaid
           class: mermaid
           format: !!python/name:pymdownx.superfences.fence_code_format
+
+copyright: Copyright &copy; 2025 Jose Saavedra & Narciso Yunda
+
+nav:
+  - '🏠 Inicio': 'index.md'
+  - '🚀 Guías de Arquitectura':
+    - 'Visión General': 'arquitectura.md'
+    - 'Arquitectura Detallada': 'ARQUITECTURA_DETALLADA.md'
+  - '🔧 Guías Técnicas':
+    - 'Instrucciones Docker': 'docs/INSTRUCCIONES_DOCKER.md'
+    - 'URLs Corregidas': 'URLS_CORREGIDAS.md'
+  - '✅ Checklists y Resúmenes':
+    - 'Checklist del Proyecto': 'CHECKLIST.md'
+    - 'Cambios en Frontend': 'CAMBIOS_FRONTEND.md'
+    - 'Resumen de Cambios': 'RESUMEN_CAMBIOS.md'
+  - '🗺️ Mapa del Proyecto':
+    - 'Índice de Documentación': 'INDICE_DOCUMENTACION.md'
