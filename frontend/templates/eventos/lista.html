@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+
+{% block title %}Eventos - Red Social Deportistas{% endblock %}
+
+{% block content %}
+<div class="card">
+  <h2 style="margin-bottom: 0.5rem;">
+    <i class="fas fa-calendar-alt"></i> Eventos deportivos
+  </h2>
+  <p style="color: #666;">
+    Información recibida desde el microservicio de analytics mediante el gateway.
+  </p>
+
+  {% set items = [] %}
+  {% if eventos %}
+    {% if eventos.data is defined %}
+      {% set items = eventos.data %}
+    {% else %}
+      {% set items = eventos %}
+    {% endif %}
+  {% endif %}
+
+  {% if items %}
+    <div style="margin-top: 1.5rem; display: grid; gap: 1rem;">
+      {% for evento in items %}
+        <div style="border: 1px solid #eee; border-radius: 10px; padding: 1rem;">
+          <h3 style="margin-bottom: 0.25rem;">
+            {{ evento.nombre or 'Evento deportivo' }}
+          </h3>
+          <p style="color: #555; margin-bottom: 0.25rem;">
+            {{ evento.descripcion or 'Descripción no disponible' }}
+          </p>
+          <small style="color: #888;">
+            Fecha: {{ evento.fecha or 'Por definir' }}
+          </small>
+        </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <p style="margin-top: 1rem; color: #999;">Aún no se registran eventos.</p>
+  {% endif %}
+
+  <div class="btn-group" style="margin-top: 1.5rem;">
+    <a href="{{ url_for('crear_evento') }}" class="btn">
+      <i class="fas fa-plus"></i> Crear Evento
+    </a>
+    <a href="{{ url_for('lista_publicaciones') }}" class="btn btn-secondary">
+      <i class="fas fa-newspaper"></i> Publicaciones
+    </a>
+  </div>
+</div>
+{% endblock %}

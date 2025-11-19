@@ -30,4 +30,4 @@ async def get_estadisticas():
     """Obtener estadísticas de deportistas."""
     return {"data": {}, "message": "Estadísticas de deportistas"}
 
-app.include_router(router, prefix="/api/v1")
+app.include_router(router)

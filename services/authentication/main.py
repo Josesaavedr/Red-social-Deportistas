@@ -35,4 +35,4 @@ async def verify_token(token: str):
     """Verificar un token."""
     return {"message": "Token válido", "token": token}
 
-app.include_router(router, prefix="/api/v1")
+app.include_router(router)

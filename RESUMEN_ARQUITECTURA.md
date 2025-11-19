@@ -156,3 +156,37 @@ curl http://localhost:8000/api/v1/analytics/api/v1/metricas
 5. **Tecnología flexible**: Cada servicio puede usar diferentes tecnologías
 6. **Punto de entrada único**: El API Gateway centraliza el acceso
 
+## 🎨 Frontend Actualizado
+
+El frontend ahora incluye todas las páginas necesarias:
+
+### Rutas Disponibles:
+- `/` - Página de inicio
+- `/publicaciones` - Lista de publicaciones
+- `/publicaciones/feed` - Feed de publicaciones
+- `/publicaciones/crear` - Crear publicación
+- `/publicaciones/<id>` - Detalle de publicación
+- `/eventos` - Lista de eventos
+- `/eventos/crear` - Crear evento
+- `/eventos/<id>` - Detalle de evento
+- `/login` - Iniciar sesión
+- `/registro` - Registrarse
+- `/logout` - Cerrar sesión
+- `/perfil` - Ver perfil
+- `/perfil/editar` - Editar perfil
+
+### Templates Incluidos:
+- `base.html` - Template base con navegación
+- `index.html` - Página de inicio
+- `publicaciones/lista.html` - Lista de publicaciones
+- `publicaciones/feed.html` - Feed de publicaciones
+- `publicaciones/crear.html` - Formulario de creación
+- `publicaciones/detalle.html` - Detalle de publicación
+- `eventos/lista.html` - Lista de eventos
+- `eventos/crear.html` - Formulario de creación
+- `eventos/detalle.html` - Detalle de evento
+- `usuarios/login.html` - Formulario de login
+- `usuarios/registro.html` - Formulario de registro
+- `usuarios/perfil.html` - Perfil de usuario
+- `usuarios/editar_perfil.html` - Editar perfil
+

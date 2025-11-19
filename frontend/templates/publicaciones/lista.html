@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+
+{% block title %}Publicaciones - Red Social Deportistas{% endblock %}
+
+{% block content %}
+<div class="card">
+  <h2 style="margin-bottom: 0.5rem;">
+    <i class="fas fa-newspaper"></i> Publicaciones
+  </h2>
+  <p style="color: #666;">
+    Los datos provienen del microservicio de gestión de datos mediante el API Gateway.
+  </p>
+
+  {% set items = [] %}
+  {% if publicaciones %}
+    {% if publicaciones.data is defined %}
+      {% set items = publicaciones.data %}
+    {% else %}
+      {% set items = publicaciones %}
+    {% endif %}
+  {% endif %}
+
+  {% if items %}
+    <div style="margin-top: 1.5rem; display: grid; gap: 1rem;">
+      {% for publicacion in items %}
+        <div style="border: 1px solid #eee; border-radius: 10px; padding: 1rem;">
+          <h3 style="margin-bottom: 0.5rem;">
+            {{ publicacion.titulo or 'Publicación sin título' }}
+          </h3>
+          <p style="color: #555;">
+            {{ publicacion.contenido or 'Contenido no disponible aún.' }}
+          </p>
+        </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <p style="margin-top: 1rem; color: #999;">
+      Todavía no hay publicaciones disponibles. ¡Crea la primera!
+    </p>
+  {% endif %}
+
+  <div class="btn-group" style="margin-top: 1.5rem;">
+    <a href="{{ url_for('crear_publicacion') }}" class="btn">
+      <i class="fas fa-plus"></i> Nueva Publicación
+    </a>
+    <a href="{{ url_for('feed_publicaciones') }}" class="btn btn-secondary">
+      <i class="fas fa-stream"></i> Ver Feed
+    </a>
+  </div>
+</div>
+{% endblock %}

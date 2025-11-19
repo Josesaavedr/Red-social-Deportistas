@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block title %}Detalle de Evento - Red Social Deportistas{% endblock %}
+
+{% block content %}
+<div class="card">
+  <h2><i class="fas fa-calendar-alt"></i> Evento #{{ evento_id }}</h2>
+  <p style="color: #666; margin-top: 1rem;">
+    Este es un placeholder para el detalle de eventos. Puedes ampliar la información
+    cuando el microservicio exponga datos reales.
+  </p>
+  <a href="{{ url_for('lista_eventos') }}" class="btn btn-secondary" style="margin-top: 1.5rem;">
+    <i class="fas fa-arrow-left"></i> Volver a eventos
+  </a>
+</div>
+{% endblock %}

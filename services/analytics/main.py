@@ -30,4 +30,4 @@ async def analizar_datos(datos: dict):
     """Analizar datos proporcionados."""
     return {"message": "Análisis completado", "data": datos}
 
-app.include_router(router, prefix="/api/v1")
+app.include_router(router)

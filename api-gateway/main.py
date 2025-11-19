@@ -93,6 +93,19 @@ async def forward_delete(service_name: str, path: str, request: Request):
 # Incluye el router en la aplicación principal.
 app.include_router(router)
 
+
+@app.get("/")
+def gateway_root(request: Request):
+    """Entrada principal con las URLs básicas para facilitar las pruebas."""
+    base_url = str(request.base_url).rstrip("/")
+    return {
+        "message": "API Gateway Red Social Deportistas",
+        "login_url": f"{base_url}/api/v1/auth/login",
+        "documentation_url": f"{base_url}/docs",
+        "health_url": f"{base_url}/health",
+    }
+
+
 # Endpoint de salud para verificar el estado del gateway.
 @app.get("/health")
 def health_check():
