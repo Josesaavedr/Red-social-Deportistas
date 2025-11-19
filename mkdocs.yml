@@ -4,6 +4,10 @@ site_author: 'jose saavedra y yudai narciso'
 # La URL donde se desplegará tu sitio. Es importante para el SEO y los enlaces.
 site_url: https://Josesaavedr.github.io/Red-social-Deportistas
 repo_url: https://github.com/Josesaavedr/Red-social-Deportistas.git
+
+
+docs_dir: docs
+
 theme:
   name: material
   language: es
@@ -40,11 +44,13 @@ nav:
     - 'Visión General': 'arquitectura.md'
     - 'Arquitectura Detallada': 'ARQUITECTURA_DETALLADA.md'
   - '🔧 Guías Técnicas':
-    - 'Instrucciones Docker': 'docs/INSTRUCCIONES_DOCKER.md'
+    - 'Instrucciones Docker': 'INSTRUCCIONES_DOCKER.md'
     - 'URLs Corregidas': 'URLS_CORREGIDAS.md'
+  - '🗺️ Mapa de Servicios': 'MAPA_SERVICIOS.md'
   - '✅ Checklists y Resúmenes':
     - 'Checklist del Proyecto': 'CHECKLIST.md'
     - 'Cambios en Frontend': 'CAMBIOS_FRONTEND.md'
     - 'Resumen de Cambios': 'RESUMEN_CAMBIOS.md'
   - '🗺️ Mapa del Proyecto':
     - 'Índice de Documentación': 'INDICE_DOCUMENTACION.md'
+  - 'Guía Carpetas y Archivos': 'GUIA_CARPETAS_Y_ARCHIVOS.md'
