@@ -101,7 +101,8 @@ docker-compose exec web python manage.py createsuperuser
 
 ### 6. Acceder a la aplicación
 
-- **Frontend**: http://localhost:8000
+- **Frontend**: http://localhost:5000
+- **Api-gateway**: http://localhost:8000
 - **Admin Panel**: http://localhost:8000/admin
 - **API**: http://localhost:8000/api/
 
