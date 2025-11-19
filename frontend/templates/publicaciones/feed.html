@@ -2,6 +2,32 @@
 
 {% block title %}Feed - Red Social Deportistas{% endblock %}
 
+{% block extra_css %}
+<style>
+  .mini-feed {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1rem;
+  }
+  .mini-card {
+    border-radius: 14px;
+    padding: 1rem;
+    background: white;
+    border: 1px solid #f0f0f0;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+  }
+  .mini-card h4 {
+    margin: 0;
+    font-size: 1rem;
+  }
+  .mini-card p {
+    margin: 0.35rem 0 0 0;
+    color: #6c757d;
+    font-size: 0.9rem;
+  }
+</style>
+{% endblock %}
+
 {% block content %}
 <div class="welcome-banner">
   <h1>
@@ -15,28 +41,26 @@
   <p>Explora rápidamente la información de los microservicios.</p>
 </div>
 
-{% set items = [] %}
-{% if publicaciones %}
-  {% if publicaciones.data is defined %}
-    {% set items = publicaciones.data %}
-  {% else %}
-    {% set items = publicaciones %}
-  {% endif %}
-{% endif %}
+{% set items = publicaciones or [] %}
 
 <div class="card">
   <h3><i class="fas fa-bolt"></i> Actividad reciente</h3>
   {% if items %}
-    <ul style="margin-top: 1rem; list-style: none; padding: 0;">
-      {% for publicacion in items[:5] %}
-        <li style="padding: 0.75rem 0; border-bottom: 1px solid #eee;">
-          <strong>{{ publicacion.titulo or 'Publicación' }}</strong><br />
-          <small style="color: #777;">
-            {{ publicacion.contenido or 'Sin contenido disponible' }}
+    <div class="mini-feed" style="margin-top: 1rem;">
+      {% for publicacion in items[:8] %}
+        <div class="mini-card">
+          <h4>{{ publicacion.titulo or 'Publicación' }}</h4>
+          <p>{{ publicacion.contenido or 'Sin contenido disponible' }}</p>
+          <small style="color:#8d99ae; display:block; margin-top:0.5rem;">
+            <i class="fas fa-user"></i> {{ publicacion.autor or 'Deportista' }} ·
+            <i class="fas fa-running"></i> {{ publicacion.deporte or 'Deporte' }}
+            {% if publicacion.duracion %}
+              · <i class="fas fa-stopwatch"></i> {{ publicacion.duracion }}
+            {% endif %}
           </small>
-        </li>
+        </div>
       {% endfor %}
-    </ul>
+    </div>
   {% else %}
     <p style="color: #777; margin-top: 0.5rem;">Sin registros aún.</p>
   {% endif %}
