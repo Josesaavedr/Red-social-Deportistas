@@ -1,41 +1,33 @@
 from fastapi import FastAPI, APIRouter, HTTPException
 import os
 
-# TODO: Importar el módulo de base de datos y los modelos
-# from .database import [tu_motor_de_base_de_datos]
-# from .models import [tus_modelos]
+app = FastAPI(title="Analytics Service")
 
-# TODO: Configurar la URL de la base de datos desde las variables de entorno
-# DATABASE_URL = os.getenv("DATABASE_URL")
-
-app = FastAPI()
-
-# TODO: Crea una instancia del router para organizar los endpoints
 router = APIRouter()
 
-# TODO: Define un endpoint raíz o de salud para verificar que el servicio está funcionando
 @app.get("/")
 def read_root():
-    return {"message": "Servicio de [nombre_del_servicio] en funcionamiento."}
+    return {"message": "Servicio de Analytics en funcionamiento."}
 
 @app.get("/health")
 def health_check():
     """Endpoint de salud para verificar el estado del servicio."""
-    return {"status": "ok"}
+    return {"status": "ok", "service": "analytics"}
 
-# TODO: Implementa los endpoints de tu microservicio aquí
-# Ejemplo de un endpoint GET:
-# @router.get("/[ruta_del_recurso]/")
-# async def get_[recurso]():
-#     # TODO: Agrega la lógica de tu negocio aquí
-#     return {"data": "Aquí van tus datos."}
+# Endpoints de ejemplo para analytics
+@router.get("/metricas")
+async def get_metricas():
+    """Obtener métricas generales."""
+    return {"data": {}, "message": "Métricas generales"}
 
-# Ejemplo de un endpoint POST:
-# @router.post("/[ruta_del_recurso]/")
-# async def create_[recurso](item: [tu_modelo_pydantic]):
-#     # TODO: Agrega la lógica para crear un nuevo recurso
-#     return {"message": "[recurso] creado exitosamente."}
+@router.get("/reportes")
+async def get_reportes():
+    """Obtener reportes de análisis."""
+    return {"data": [], "message": "Lista de reportes"}
 
+@router.post("/analizar")
+async def analizar_datos(datos: dict):
+    """Analizar datos proporcionados."""
+    return {"message": "Análisis completado", "data": datos}
 
-# TODO: Incluir el router en la aplicación principal
-# app.include_router(router, prefix="/api/v1")
+app.include_router(router, prefix="/api/v1")
