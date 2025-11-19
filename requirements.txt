@@ -1,9 +1,0 @@
-﻿Django
-djangorestframework
-psycopg2-binary
-python-decouple
-django-cors-headers
-django-filter
-gunicorn
-drf-spectacular
-Pillow==10.0.0
