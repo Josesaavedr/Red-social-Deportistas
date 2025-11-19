@@ -7,11 +7,11 @@ RUN apt-get update && apt-get install -y \
     postgresql-client \
     netcat-traditional \
     && rm -rf /var/lib/apt/lists/*
- 
-# Instalar dependencias Python
+
+# Copiar requirements e instalar dependencias Python
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
- 
+
 # Copiar aplicación
 COPY . .
 

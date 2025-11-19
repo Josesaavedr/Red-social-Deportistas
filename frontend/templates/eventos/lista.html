@@ -1,0 +1,195 @@
+{% extends 'base.html' %}
+
+{% block title %}Eventos - Red Social Deportistas{% endblock %}
+
+{% block extra_css %}
+<style>
+  .event-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1.25rem;
+    margin-top: 1.5rem;
+  }
+  .event-card {
+    border-radius: 16px;
+    border: 1px solid #f1f1f1;
+    padding: 1.25rem;
+    background: white;
+    box-shadow: 0 12px 30px rgba(0,0,0,0.08);
+  }
+  .event-card h3 { margin: 0; }
+  .event-meta {
+    color: #8d99ae;
+    font-size: 0.9rem;
+    margin-top: 0.35rem;
+  }
+  .event-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 1rem;
+  }
+  .status-chip {
+    padding: .25rem .8rem;
+    border-radius: 999px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: white;
+  }
+  .status-proximo { background: linear-gradient(135deg, var(--success-color), #2ecc71); }
+  .status-pasado { background: linear-gradient(135deg, var(--danger-color), #ff8b8b); }
+  .filter-buttons {
+    display: flex;
+    gap: .75rem;
+    flex-wrap: wrap;
+    margin-top: 1rem;
+  }
+  .filter-buttons .btn {
+    border: 1px solid rgba(102,126,234,0.35);
+    background: #fff;
+    color: var(--primary-color);
+    box-shadow: none;
+  }
+  .filter-buttons .btn.active {
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    color: #fff;
+    border-color: transparent;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+{% set base_url = url_for('lista_eventos') %}
+{% set attending_events = attending_events or [] %}
+
+<div class="card">
+  <h2 style="margin-bottom: 0.5rem;">
+    <i class="fas fa-calendar-alt"></i> Agenda deportiva
+  </h2>
+  <p style="color: #666;">
+    Eventos compartidos por toda la comunidad. Usa los filtros para ver los que ya pasaron, los próximos o los que tú organizaste.
+  </p>
+
+  <div class="filter-buttons">
+    <a href="{{ base_url if filtro == 'pasados' else url_for('lista_eventos', filtro='pasados') }}"
+       class="btn {{ 'active' if filtro == 'pasados' }}">
+      <i class="fas fa-history"></i> Pasados ({{ counts.pasados | default(0) }})
+    </a>
+    <a href="{{ base_url if filtro == 'proximos' else url_for('lista_eventos', filtro='proximos') }}"
+       class="btn {{ 'active' if filtro == 'proximos' }}">
+      <i class="fas fa-bolt"></i> Próximos ({{ counts.proximos | default(0) }})
+    </a>
+    <a href="{{ base_url if filtro == 'mios' else url_for('lista_eventos', filtro='mios') }}"
+       class="btn {{ 'active' if filtro == 'mios' }}">
+      <i class="fas fa-user"></i> Mis eventos ({{ counts.mios | default(0) }})
+    </a>
+  </div>
+
+  <p style="margin-top: 0.75rem; color: #8d99ae;">
+    {% if filtro == 'pasados' %}
+      Mostrando eventos que ya finalizaron.
+    {% elif filtro == 'proximos' %}
+      Mostrando eventos programados.
+    {% elif filtro == 'mios' %}
+      Solo eventos creados desde tu sesión.
+    {% else %}
+      Mostrando todos los eventos disponibles.
+    {% endif %}
+  </p>
+
+  <div class="btn-group" style="margin-top: 1rem;">
+    <a href="{{ url_for('crear_evento') }}" class="btn">
+      <i class="fas fa-plus"></i> Crear Evento
+    </a>
+    <a href="{{ url_for('lista_publicaciones') }}" class="btn btn-secondary">
+      <i class="fas fa-newspaper"></i> Publicaciones
+    </a>
+  </div>
+</div>
+
+{% set eventos_list = eventos if eventos else [] %}
+
+{% if eventos_list %}
+  <div class="event-grid">
+    {% for evento in eventos_list %}
+      <div class="event-card">
+          <h3>{{ evento.nombre or 'Evento deportivo' }}</h3>
+          <p style="margin:.3rem 0; color:#555;">{{ evento.descripcion or 'Descripción no disponible' }}</p>
+          <div class="event-meta">
+            <span><i class="fas fa-calendar"></i> {{ evento.fecha_legible or evento.fecha or 'Por definir' }}</span><br />
+            <span><i class="fas fa-map-marker-alt"></i> {{ evento.lugar or 'Lugar por confirmar' }}</span><br />
+            <span><i class="fas fa-user-friends"></i> {{ evento.organizador or 'Organizador' }}</span><br />
+            <span>
+              <i class="fas fa-users"></i>
+              {% if evento.id %}
+                <span id="event-attendees-{{ evento.id }}">{{ evento.attendees_count or (evento.attendees|length if evento.attendees is defined else 0) }}</span>
+              {% else %}
+                {{ evento.attendees_count or (evento.attendees|length if evento.attendees is defined else 0) }}
+              {% endif %}
+              asistencia confirmada
+            </span>
+          </div>
+          <div class="event-actions">
+            {% set estado = evento.estado or 'proximo' %}
+            <span class="status-chip status-{{ 'proximo' if estado != 'pasado' else 'pasado' }}">
+              {{ 'Próximo' if estado != 'pasado' else 'Finalizado' }}
+            </span>
+            {% if evento.es_mio %}
+            <span class="badge-pill" style="background: rgba(76,205,196,.15); color: var(--success-color);">
+              <i class="fas fa-star"></i> Mi evento
+            </span>
+            {% endif %}
+          </div>
+          {% if evento.id %}
+          <div class="event-actions" style="margin-top: .75rem;">
+            <button
+              class="btn btn-secondary btn-attend"
+              data-event-id="{{ evento.id }}"
+              data-attend-url="{{ url_for('asistir_evento', event_id=evento.id) }}"
+            >
+              {% if attending_events and evento.id in attending_events %}
+                <i class="fas fa-user-check"></i> Cancelar asistencia
+              {% else %}
+                <i class="fas fa-user-plus"></i> Confirmar asistencia
+              {% endif %}
+            </button>
+          </div>
+          {% endif %}
+        </div>
+      {% endfor %}
+  </div>
+{% else %}
+  <p style="margin-top: 1.5rem; color: #999;">Aún no se registran eventos en esta categoría.</p>
+{% endif %}
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('.btn-attend').forEach((btn) => {
+    btn.addEventListener('click', async () => {
+      const url = btn.dataset.attendUrl;
+      const eventId = btn.dataset.eventId;
+      try {
+        const response = await fetch(url, { method: 'POST' });
+        const data = await response.json();
+        if (!response.ok || !data.success) {
+          throw new Error(data.message || 'No se pudo actualizar la asistencia.');
+        }
+        const counter = document.getElementById(`event-attendees-${eventId}`);
+        if (counter) {
+          counter.textContent = data.attendees;
+        }
+        if (data.attending) {
+          btn.innerHTML = '<i class="fas fa-user-check"></i> Cancelar asistencia';
+        } else {
+          btn.innerHTML = '<i class="fas fa-user-plus"></i> Confirmar asistencia';
+        }
+      } catch (error) {
+        alert(error.message || 'Ocurrió un error al registrar tu asistencia.');
+      }
+    });
+  });
+});
+</script>
+{% endblock %}

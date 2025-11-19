@@ -1,39 +1,24 @@
 site_name: Documentación - Red Social Deportistas
 site_description: 'Documentación técnica del proyecto de red social para deportistas.'
-site_author: 'jose saavedra y narciso yudai'
-site_url: https://Josesaavedr.github.io/Red-social-Deportistas
-
-# Reemplaza esta URL con la de tu repositorio en GitHub
-
-repo_url: https://github.com/Josesaavedr/Red-social-Deportistas.git
-docs_dir: 'docs'
+site_author: 'Tu Nombre'
 
 theme:
   name: material
   language: es
   palette:
+    # Paleta para modo claro
     - scheme: default
       toggle:
         icon: material/brightness-7
         name: Cambiar a modo oscuro
+    # Paleta para modo oscuro
     - scheme: slate
       toggle:
         icon: material/brightness-4
         name: Cambiar a modo claro
   features:
     - navigation.tabs
-    - navigation.sections
     - navigation.top
-  repo_name: 'Ver en GitHub'
-
-nav:
-  - '👋 Bienvenida': index.md
-  - '🚀 Guía de Inicio (README)': proyecto/README.md
-  - '📚 Índice General': INDICE_DOCUMENTACION.md
-  - '🏗️ Arquitectura': ARQUITECTURA_DETALLADA.md
-  - '🗺️ Mapa de Servicios': MAPA_SERVICIOS.md
-  - '📂 Guía de Archivos': GUIA_CARPETAS_Y_ARCHIVOS.md
-  - '📋 Resumen de Cambios': RESUMEN_CAMBIOS.md
 
 markdown_extensions:
   - pymdownx.superfences:
@@ -41,10 +26,3 @@ markdown_extensions:
         - name: mermaid
           class: mermaid
           format: !!python/name:pymdownx.superfences.fence_code_format
-
-plugins:
-  - search
-  - mkdocstrings:
-      handlers:
-        python:
-          {}
