@@ -1,7 +1,9 @@
 site_name: Documentación - Red Social Deportistas
 site_description: 'Documentación técnica del proyecto de red social para deportistas.'
 site_author: 'jose saavedra y yudai narciso'
+site_url: https://josesaavedr.github.io/Red-social-Deportistas/
 
+repo_url: https://github.com/Josesaavedr/Red-social-Deportistas.git
 theme:
   name: material
   language: es
