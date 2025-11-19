@@ -1,0 +1,87 @@
+{% extends 'base.html' %}
+
+{% block title %}Editar Perfil - Red Social Deportistas{% endblock %}
+
+{% block content %}
+<div style="max-width: 750px; margin: 0 auto;">
+  <a href="{{ url_for('perfil_usuario') }}" class="btn btn-secondary" style="margin-bottom: 1rem;">
+    <i class="fas fa-arrow-left"></i> Volver al perfil
+  </a>
+
+  <div class="card">
+    <h2 style="margin-bottom: 1rem;">
+      <i class="fas fa-user-edit"></i> Personaliza tu perfil
+    </h2>
+    <p style="color: #666; margin-bottom: 1.5rem;">
+      Estos datos se almacenan localmente en la sesión para que puedas visualizar tu bio, redes y estilo deportivo.
+    </p>
+
+    <form method="post" style="display: flex; flex-direction: column; gap: 1.25rem;">
+      <div class="form-group">
+        <label for="full_name"><i class="fas fa-id-card"></i> Nombre completo</label>
+        <input type="text" id="full_name" name="full_name" class="form-control" value="{{ profile.full_name }}" placeholder="Tu nombre" />
+      </div>
+
+      <div class="form-group">
+        <label for="headline"><i class="fas fa-quote-left"></i> Descripción corta</label>
+        <input type="text" id="headline" name="headline" class="form-control" value="{{ profile.headline }}" placeholder="Entrenador, maratonista, etc." />
+      </div>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+        <div class="form-group">
+          <label for="sport"><i class="fas fa-dumbbell"></i> Deporte principal</label>
+          <input type="text" id="sport" name="sport" class="form-control" value="{{ profile.sport }}" placeholder="Running, Crossfit..." />
+        </div>
+        <div class="form-group">
+          <label for="level"><i class="fas fa-signal"></i> Nivel</label>
+          <select id="level" name="level" class="form-control">
+            {% set levels = ['Principiante','Intermedio','Avanzado','Profesional','Aficionado'] %}
+            {% for level in levels %}
+              <option value="{{ level }}" {% if profile.level == level %}selected{% endif %}>{{ level }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="location"><i class="fas fa-map-marker-alt"></i> Ubicación</label>
+          <input type="text" id="location" name="location" class="form-control" value="{{ profile.location }}" placeholder="Ciudad, País" />
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="bio"><i class="fas fa-align-left"></i> Biografía</label>
+        <textarea id="bio" name="bio" class="form-control" rows="4" placeholder="Cuéntanos sobre tu historia deportiva">{{ profile.bio }}</textarea>
+      </div>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem;">
+        <div class="form-group">
+          <label for="photo_url"><i class="fas fa-user-circle"></i> URL Foto de perfil</label>
+          <input type="url" id="photo_url" name="photo_url" class="form-control" value="{{ profile.photo_url }}" placeholder="https://" />
+        </div>
+        <div class="form-group">
+          <label for="cover_url"><i class="fas fa-image"></i> URL Imagen de portada</label>
+          <input type="url" id="cover_url" name="cover_url" class="form-control" value="{{ profile.cover_url }}" placeholder="https://" />
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="interests"><i class="fas fa-hashtag"></i> Etiquetas de interés</label>
+        <input type="text" id="interests" name="interests" class="form-control" value="{{ profile.interests | join(', ') }}" placeholder="Running, Fuerza, Nutrición" />
+        <small style="color:#777;">Sepáralas con comas.</small>
+      </div>
+
+      <div class="form-group">
+        <label><i class="fas fa-share-alt"></i> Redes</label>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem;">
+          <input type="url" name="website" class="form-control" value="{{ profile.website }}" placeholder="Sitio web" />
+          <input type="text" name="instagram" class="form-control" value="{{ profile.instagram }}" placeholder="Usuario de Instagram" />
+          <input type="text" name="twitter" class="form-control" value="{{ profile.twitter }}" placeholder="Usuario de Twitter" />
+        </div>
+      </div>
+
+      <button type="submit" class="btn" style="width: 100%; justify-content: center;">
+        <i class="fas fa-save"></i> Guardar Cambios
+      </button>
+    </form>
+  </div>
+</div>
+{% endblock %}
